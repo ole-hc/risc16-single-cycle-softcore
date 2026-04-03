@@ -1,0 +1,40 @@
+bitte mit nur minimalen kommentaren
+# Vivado
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.gen/
+*.Xil/
+*.xpr
+
+# Logs / reports
+*.log
+*.jou
+*.pb
+*.wdb
+*.wcfg
+*.vcd
+*.rpt
+*.xml
+
+# Outputs
+*.dcp
+*.bit
+*.ltx
+
+# Simulation
+xsim.dir/
+
+# Temp
+*~
+*.bak
+*.tmp
+*.swp
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
