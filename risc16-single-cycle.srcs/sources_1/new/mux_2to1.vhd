@@ -32,10 +32,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity mux_2to1 is
-    Port ( a : in STD_LOGIC;
-           b : in STD_LOGIC;
+    generic ( data_width : integer := 16);
+    Port ( a : in std_logic_vector (data_width - 1 downto 0);
+           b : in std_logic_vector (data_width - 1 downto 0);
            sel : in STD_LOGIC;
-           y : out STD_LOGIC);
+           y : out std_logic_vector (data_width - 1 downto 0));
 end mux_2to1;
 
 architecture Behavioral of mux_2to1 is
