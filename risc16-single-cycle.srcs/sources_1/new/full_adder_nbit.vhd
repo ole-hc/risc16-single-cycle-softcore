@@ -44,13 +44,13 @@ end full_adder_nbit;
 
 architecture Dataflow of full_adder_nbit is
 
-signal sum_temp : unsigned(data_width downto 0);
+signal sum_temp : signed(data_width downto 0);
 
 begin
 
-    sum_temp <= resize(unsigned(a), data_width+1) + 
-                resize(unsigned(b), data_width+1) + 
-                resize(unsigned'('0'&c_in), data_width+1);
+    sum_temp <= resize(signed(a), data_width+1) + 
+                resize(signed(b), data_width+1) + 
+                resize(signed'('0'&c_in), data_width+1);
     sum  <= std_logic_vector(sum_temp(data_width-1 downto 0));
     c_out <= sum_temp(data_width);
 

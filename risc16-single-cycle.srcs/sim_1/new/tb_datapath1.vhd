@@ -24,7 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -49,6 +49,8 @@ end component;
 signal clk, reset, load_pc, pc_sel : std_logic := '0';
 signal ir_addr, br_offset : std_logic_vector (15 downto 0) := (others => '0');
 
+signal offset : integer := -5;
+
 begin
 
 dut : prog_counter port map (clk => clk, reset => reset, load_pc => load_pc, pc_sel => pc_sel, ir_addr => ir_addr, br_offset => br_offset);
@@ -59,12 +61,23 @@ timing : process begin
 end process timing;
 
 test : process begin
+    -- count until x0004
     reset <= '1';
+    load_pc <= '1';
     wait until clk = '1';
     wait for 1ps;
+    reset <= '0';
     
     wait until ir_addr = x"0004";
-    wait for 100ns;
+    
+    -- jmp
+    br_offset <= std_logic_vector(to_signed(offset, br_offset'length));
+    pc_sel <= '1';
+    wait until clk = '1';
+    wait for 1ps;
+    pc_sel <= '0';
+    wait for 10ns;
+    
 end process test;
 
 end Behavioral;
