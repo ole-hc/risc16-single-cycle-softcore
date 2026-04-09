@@ -39,16 +39,14 @@ architecture Behavioral of tb_Risc16v1_1 is
 
 component Risc16v1_1 is
     Port ( clk : in STD_LOGIC;
-           reset : in STD_LOGIC;
-           load_pc : in std_logic;
-           pc_sel : in std_logic);
+           reset : in STD_LOGIC);
 end component;
 
-signal clk, reset, load_pc, pc_sel : std_logic := '0';
+signal clk, reset : std_logic := '0';
 
 begin
 
-dut : Risc16v1_1 port map (clk => clk, reset => reset, load_pc => load_pc, pc_sel => pc_sel);
+dut : Risc16v1_1 port map (clk => clk, reset => reset);
 
 timing : process begin 
     wait for 25ns;
@@ -61,8 +59,7 @@ stimulus : process begin
     wait for 1ps;
     reset <= '0';
     
-    load_pc <= '1';
-    wait for 510ns;
+    wait;
     
 end process stimulus;
 

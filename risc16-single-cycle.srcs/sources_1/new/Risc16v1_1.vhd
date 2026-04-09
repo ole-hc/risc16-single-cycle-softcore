@@ -33,9 +33,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Risc16v1_1 is
     Port ( clk : in STD_LOGIC;
-           reset : in STD_LOGIC;
-           load_pc : in std_logic;
-           pc_sel : in std_logic);
+           reset : in STD_LOGIC);
 end Risc16v1_1;
 
 architecture Structural of Risc16v1_1 is
@@ -46,7 +44,9 @@ component prog_counter is
            load_pc : in STD_LOGIC;
            pc_sel : in STD_LOGIC;
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
-           br_offset : in std_logic_vector (15 downto 0));
+           br_offset : in std_logic_vector (15 downto 0);
+           instruction : in std_logic_vector (15 downto 0);
+           idle : out std_logic);
 end component;
 
 component instruction_memory is
@@ -55,9 +55,28 @@ component instruction_memory is
 end component; 
 
 signal br_offset, ir_addr, instruction: STD_LOGIC_VECTOR (15 downto 0) := (others => '0');
+signal pc_sel, idle : std_logic := '0';
+signal load_pc : std_logic := '1';
 
 begin
-program_counter : prog_counter port map (clk => clk, reset => reset, load_pc => load_pc, pc_sel => pc_sel, ir_addr => ir_addr, br_offset => br_offset);
-instr_memory : instruction_memory port map (addr => ir_addr(3 downto 0), data => instruction);
+program_counter : prog_counter port map ( 
+    clk => clk, 
+    reset => reset, 
+    load_pc => load_pc, 
+    pc_sel => pc_sel, 
+    ir_addr => ir_addr, 
+    br_offset => br_offset,
+    instruction => instruction,
+    idle => idle);
+    
+instr_memory : instruction_memory port map (
+    addr => ir_addr(3 downto 0), 
+    data => instruction);
+
+check_idle : process (idle) begin
+    if (idle = '1') then
+        load_pc <= '0';
+    end if;
+end process check_idle;
 
 end Structural;

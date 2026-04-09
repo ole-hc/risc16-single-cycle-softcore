@@ -37,7 +37,9 @@ entity prog_counter is
            load_pc : in STD_LOGIC;
            pc_sel : in STD_LOGIC;
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
-           br_offset : in std_logic_vector (15 downto 0));
+           br_offset : in std_logic_vector (15 downto 0);
+           instruction : in std_logic_vector (15 downto 0);
+           idle : out std_logic);
 end prog_counter;
 
 architecture Structural of prog_counter is
@@ -88,5 +90,11 @@ pc_mux : mux_2to1
     port map (a => x"0000", b => br_offset, sel => pc_sel, y => mux_out);
 
 ir_addr <= pc_value;
+
+check_stop : process (instruction) begin
+    if (instruction = x"c001") then -- halt cmd
+        idle <= '1';
+    end if;
+end process check_stop;
 
 end Structural;
