@@ -14,7 +14,6 @@ bitte mit nur minimalen kommentaren
 *.jou
 *.pb
 *.wdb
-*.wcfg
 *.vcd
 *.rpt
 *.xml
