@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_regfile_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="tb_regfile" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="1,090.920 ns"></ZoomStartTime>
+      <ZoomEndTime time="2,090.921 ns"></ZoomEndTime>
+      <Cursor1Time time="2,000.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="276"></NameColumnWidth>
+      <ValueColumnWidth column_width="108"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="9" />
+   <wvobject type="logic" fp_name="/tb_regfile/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_regfile/reg_write">
+      <obj_property name="ElementShortName">reg_write</obj_property>
+      <obj_property name="ObjectShortName">reg_write</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_regfile/a_addr">
+      <obj_property name="ElementShortName">a_addr[3:0]</obj_property>
+      <obj_property name="ObjectShortName">a_addr[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_regfile/b_addr">
+      <obj_property name="ElementShortName">b_addr[3:0]</obj_property>
+      <obj_property name="ObjectShortName">b_addr[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_regfile/c_addr">
+      <obj_property name="ElementShortName">c_addr[3:0]</obj_property>
+      <obj_property name="ObjectShortName">c_addr[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_regfile/a_data">
+      <obj_property name="ElementShortName">a_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">a_data[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_regfile/b_data">
+      <obj_property name="ElementShortName">b_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">b_data[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_regfile/c_data">
+      <obj_property name="ElementShortName">c_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">c_data[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_regfile/dut/regfile">
+      <obj_property name="ElementShortName">regfile[7:0][15:0]</obj_property>
+      <obj_property name="ObjectShortName">regfile[7:0][15:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+</wave_config>
