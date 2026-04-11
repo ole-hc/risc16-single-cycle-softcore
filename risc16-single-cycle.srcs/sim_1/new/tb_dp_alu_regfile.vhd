@@ -79,8 +79,17 @@ stimulus : process begin
     wait for 1ps;
     
     -- add r3, r2, r1 
+    imm7_op <= '1';
     instruction <= "001" & "011" & "010" & "0000" & "001";
+    wait until clk = '1';
+    wait for 1ps;
     
-    -- nand
+    -- nand r1, r2, r3
+    -- x"0001" nand x"0002"
+    alu_op <= "01";
+    instruction <= "000" & "001" & "010" & "0000" & "011";
+    wait until clk = '1';
+    wait for 1ps;
+    
 end process stimulus; 
 end Behavioral;
