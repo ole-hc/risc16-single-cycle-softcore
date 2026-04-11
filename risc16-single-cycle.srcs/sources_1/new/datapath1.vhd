@@ -91,10 +91,6 @@ pc_mux : mux_2to1
 
 ir_addr <= pc_value;
 
-check_stop : process (instruction) begin
-    if (instruction = x"c001") then -- halt cmd
-        idle <= '1';
-    end if;
-end process check_stop;
+idle <= '1' when (instruction = x"c001") else '0'; -- stop command
 
 end Structural;
