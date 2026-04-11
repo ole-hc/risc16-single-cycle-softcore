@@ -35,6 +35,7 @@ entity dp_alu_regfile is
     Port ( clk : in STD_LOGIC;
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
+           beq_cmd : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : std_logic_vector (15 downto 0);
            a_equ_b : out STD_LOGIC);
@@ -88,9 +89,14 @@ signal alu_b : std_logic_vector (15 downto 0) := (others => '0');
 begin
 
 c_addr <= instruction(12 downto 10);
-b_addr <= instruction(2 downto 0);
 a_addr <= instruction(9 downto 7);
 immediate <= instruction(6 downto 0);
+
+mux_beq : mux_2to1 generic map (data_width => 3)
+port map (
+    a => instruction(2 downto 0), b => instruction(12 downto 10), sel => beq_cmd, 
+    y => b_addr
+);
 
 register_file : regfile port map (
     clk => clk, reg_write => reg_write, 

@@ -41,19 +41,20 @@ component dp_alu_regfile is
     Port ( clk : in STD_LOGIC;
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
+           beq_cmd : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : std_logic_vector (15 downto 0);
            a_equ_b : out STD_LOGIC);
-end component;
+end  component;
 
-signal clk, reg_write, imm7_op, a_equ_b : std_logic := '0';
+signal clk, reg_write, imm7_op, a_equ_b, beq_cmd : std_logic := '0';
 signal alu_op : std_logic_vector(1 downto 0) := (others => '0');
 signal instruction : std_logic_vector(15 downto 0) := (others => '0');
 
 begin
 
 dut : dp_alu_regfile port map (
-    clk => clk, reg_write => reg_write, imm7_op => imm7_op, alu_op => alu_op, instruction => instruction,
+    clk => clk, reg_write => reg_write, imm7_op => imm7_op, beq_cmd => beq_cmd, alu_op => alu_op, instruction => instruction,
     a_equ_b => a_equ_b
 );
 
@@ -66,6 +67,7 @@ stimulus : process begin
     wait for 100ns; 
     
     -- addi r1, r0, 1
+    beq_cmd <= '0';
     reg_write <= '1';
     imm7_op <= '1';
     alu_op <= "00";
@@ -90,6 +92,34 @@ stimulus : process begin
     instruction <= "000" & "001" & "010" & "0000" & "011";
     wait until clk = '1';
     wait for 1ps;
+    
+    -- beq test
+    -- addi r1, r0, 1
+    beq_cmd <= '0';
+    reg_write <= '1';
+    imm7_op <= '1';
+    alu_op <= "00";
+    instruction <= "001" & "001" & "000" & "0000001";
+    wait until clk = '1';
+    wait for 1ps;
+    
+    -- beq r1, r0, 5
+    beq_cmd <= '1';
+    imm7_op <= '0';
+    alu_op <= "10";
+    instruction <= "110" & "001" & "000" & "0000101";
+    wait until clk = '1';
+    wait for 1ps;
+    assert a_equ_b = '0'
+    report "False positive in first BEQ cmd" severity error;
+    wait for 10ns;
+    
+    -- beq r0, r0, -1
+    instruction <= "110" & "000" & "000" & "1111110";
+    wait until clk = '1';
+    wait for 1ps;
+    assert a_equ_b = '1'
+    report "False negative in second BEQ cmd" severity error;
     
 end process stimulus; 
 end Behavioral;
