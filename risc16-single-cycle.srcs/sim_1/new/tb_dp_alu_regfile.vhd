@@ -43,7 +43,7 @@ component dp_alu_regfile is
            imm7_op : in STD_LOGIC;
            beq_cmd : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
-           instruction : std_logic_vector (15 downto 0);
+           instruction : in std_logic_vector (15 downto 0);
            a_equ_b : out STD_LOGIC;
            immediate16 : out std_logic_vector (15 downto 0));
 end component;

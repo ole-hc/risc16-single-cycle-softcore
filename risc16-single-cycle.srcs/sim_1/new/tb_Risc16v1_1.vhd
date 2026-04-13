@@ -45,7 +45,7 @@ end component;
 signal clk, reset : std_logic := '0';
 
 begin
-
+-- load instructions from instruction memory
 dut : Risc16v1_1 port map (clk => clk, reset => reset);
 
 timing : process begin 

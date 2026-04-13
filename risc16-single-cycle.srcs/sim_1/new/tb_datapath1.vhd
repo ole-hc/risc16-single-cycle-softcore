@@ -70,7 +70,7 @@ test : process begin
     
     wait until ir_addr = x"0004";
     
-    -- jmp
+    -- jmp back to x0000
     br_offset <= std_logic_vector(to_signed(offset, br_offset'length));
     pc_sel <= '1';
     wait until clk = '1';

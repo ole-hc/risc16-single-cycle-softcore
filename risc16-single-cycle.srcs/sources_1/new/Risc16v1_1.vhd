@@ -44,9 +44,7 @@ component prog_counter is
            load_pc : in STD_LOGIC;
            pc_sel : in STD_LOGIC;
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
-           br_offset : in std_logic_vector (15 downto 0);
-           instruction : in std_logic_vector (15 downto 0);
-           idle : out std_logic);
+           br_offset : in std_logic_vector (15 downto 0));
 end component;
 
 component instruction_memory is
@@ -65,18 +63,12 @@ program_counter : prog_counter port map (
     load_pc => load_pc, 
     pc_sel => pc_sel, 
     ir_addr => ir_addr, 
-    br_offset => br_offset,
-    instruction => instruction,
-    idle => idle);
+    br_offset => br_offset
+);
     
 instr_memory : instruction_memory port map (
     addr => ir_addr(3 downto 0), 
-    data => instruction);
-
-check_idle : process (idle) begin
-    if (idle = '1') then
-        load_pc <= '0';
-    end if;
-end process check_idle;
+    data => instruction
+);
 
 end Structural;
