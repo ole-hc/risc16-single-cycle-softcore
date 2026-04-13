@@ -44,18 +44,19 @@ component dp_alu_regfile is
            beq_cmd : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : std_logic_vector (15 downto 0);
-           a_equ_b : out STD_LOGIC);
-end  component;
+           a_equ_b : out STD_LOGIC;
+           immediate16 : out std_logic_vector (15 downto 0));
+end component;
 
 signal clk, reg_write, imm7_op, a_equ_b, beq_cmd : std_logic := '0';
 signal alu_op : std_logic_vector(1 downto 0) := (others => '0');
-signal instruction : std_logic_vector(15 downto 0) := (others => '0');
+signal instruction, immediate16 : std_logic_vector(15 downto 0) := (others => '0');
 
 begin
 
 dut : dp_alu_regfile port map (
     clk => clk, reg_write => reg_write, imm7_op => imm7_op, beq_cmd => beq_cmd, alu_op => alu_op, instruction => instruction,
-    a_equ_b => a_equ_b
+    a_equ_b => a_equ_b, immediate16 => immediate16
 );
 
 timing : process begin 
