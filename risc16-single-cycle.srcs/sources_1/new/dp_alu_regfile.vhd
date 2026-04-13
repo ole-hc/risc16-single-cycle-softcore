@@ -37,7 +37,7 @@ entity dp_alu_regfile is
            imm7_op : in STD_LOGIC;
            beq_cmd : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
-           instruction : std_logic_vector (15 downto 0);
+           instruction : in std_logic_vector (15 downto 0);
            a_equ_b : out STD_LOGIC;
            immediate16 : out std_logic_vector (15 downto 0));
 end dp_alu_regfile;
@@ -84,7 +84,7 @@ signal a_data, b_data, c_data : std_logic_vector (15 downto 0) := (others => '0'
 signal immediate : std_logic_vector(6 downto 0) := (others => '0');
 
 -- mux2to1 
-signal alu_b : std_logic_vector (15 downto 0) := (others => '0');
+signal alu_b, imm16_input : std_logic_vector (15 downto 0) := (others => '0');
 
 begin
 
@@ -106,11 +106,11 @@ register_file : regfile port map (
 
 extender_2k : extender2k port map (
     data => immediate,
-    q => immediate16
+    q => imm16_input
 );
 
 mux_b_imm : mux_2to1 port map (
-    a => b_data, b => immediate16,
+    a => b_data, b => imm16_input,
     sel => imm7_op, 
     y => alu_b
 );
@@ -119,5 +119,7 @@ alu16 : alu port map (
     a => a_data, b => alu_b, alu_op => alu_op,
     c => c_data, a_equ_b => a_equ_b
 );
+
+immediate16 <= imm16_input;
 
 end Structural;
