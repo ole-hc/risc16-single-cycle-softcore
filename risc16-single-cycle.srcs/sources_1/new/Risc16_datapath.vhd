@@ -42,8 +42,7 @@ entity Risc16_datapath is
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in STD_LOGIC_VECTOR (15 downto 0);
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
-           a_equ_b : out STD_LOGIC;
-           idle : out std_logic);
+           a_equ_b : out STD_LOGIC);
 end Risc16_datapath;
 
 architecture Structural of Risc16_datapath is
