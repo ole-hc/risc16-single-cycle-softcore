@@ -7,9 +7,10 @@
 # Current ERRORs of Risc16v1_2
 
 - first addi doesnt work: 
-	- symptom: imm7_op and other signals not set
+	- symptome: imm7_op and other signals not set
 	- cause: controller process only starts on `instruction` or `a_equ_b` change
 - beq substraction doesnt work
 	- no further info right now
 
+![Risc16v1_2_waveform](figures/Risc16v1_2_error.png)
 
