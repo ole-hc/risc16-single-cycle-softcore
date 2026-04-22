@@ -34,7 +34,6 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity Risc16_controller is
     Port ( instruction : in STD_LOGIC_VECTOR (15 downto 0);
            a_equ_b : in STD_LOGIC;
-           reset : in std_logic;
            pc_load : out STD_LOGIC;
            pc_sel : out STD_LOGIC;
            reg_write : out STD_LOGIC;
@@ -52,7 +51,7 @@ begin
 
 opcode <= instruction(15 downto 13);
 
-output : process (opcode, a_equ_b, reset) begin
+output : process (opcode, a_equ_b) begin
     case opcode is 
         -- add
         when "000" => 

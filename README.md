@@ -6,12 +6,9 @@
 
 # Current ERRORs of Risc16v1_2
 
-- first addi doesnt work: 
-	- symptome: imm7_op and other signals not set
-	- cause: controller process only starts on `instruction` or `a_equ_b` change
-- when the processor goes into idle `pc_load` gets set to '0' --> pc doesnt increment anymore cant be undone by a reset because the controller is not connected to the reset signal
+NONE :)
 
-Solution to these two problems: connect the reset to controller and add it to its activation list
+# Past ERRORs of Risc16v1_2
 
 - the controller only ever set the signals for the first "000" case
 	- the problem was in the controller file the sensitivity list of the output process contained `instruction` instead of `opcode`
