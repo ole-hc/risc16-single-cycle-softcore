@@ -40,6 +40,7 @@ architecture Behavioral of tb_Risc16_controller is
 component Risc16_controller is
     Port ( instruction : in STD_LOGIC_VECTOR (15 downto 0);
            a_equ_b : in STD_LOGIC;
+           reset : in std_logic;
            pc_load : out STD_LOGIC;
            pc_sel : out STD_LOGIC;
            reg_write : out STD_LOGIC;
@@ -50,21 +51,24 @@ component Risc16_controller is
 end component;
 
 signal instruction : std_logic_vector (15 downto 0) := (others => '0');
-signal a_equ_b, pc_load, pc_sel, reg_write, imm7_op : std_logic := '0';
+signal a_equ_b, reset, pc_load, pc_sel, reg_write, imm7_op : std_logic := '0';
 signal alu_op : std_logic_vector (1 downto 0) := "00";
 signal beq_cmd, idle : std_logic := '0';
 
 begin
 
 dut : Risc16_controller port map (
-    instruction => instruction, a_equ_b => a_equ_b,
+    instruction => instruction, a_equ_b => a_equ_b, reset => reset,
     pc_load => pc_load, pc_sel => pc_sel, reg_write => reg_write, imm7_op => imm7_op,
     alu_op => alu_op, beq_cmd => beq_cmd, idle => idle
 );
 
 stimulus : process begin 
     instruction <= "0000000000000000";
-    a_equ_b <= '0';
+    a_equ_b <= '1';
+    reset <= '1';
+    wait for 10ns;
+    reset <= '0';
     
     wait for 100ns;
     instruction <= "0001111000000101"; -- add r7, r4, r5 

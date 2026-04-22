@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_Risc16v1_2_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="tb_Risc16v1_2" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="478.670 ns"></ZoomStartTime>
+      <ZoomEndTime time="606.671 ns"></ZoomEndTime>
+      <Cursor1Time time="530.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="276"></NameColumnWidth>
+      <ValueColumnWidth column_width="108"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="14" />
+   <wvobject type="logic" fp_name="/tb_Risc16v1_2/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_Risc16v1_2/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_Risc16v1_2/idle">
+      <obj_property name="ElementShortName">idle</obj_property>
+      <obj_property name="ObjectShortName">idle</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_Risc16v1_2/dut/datapath/ir_addr">
+      <obj_property name="ElementShortName">ir_addr[15:0]</obj_property>
+      <obj_property name="ObjectShortName">ir_addr[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_Risc16v1_2/dut/instruction">
+      <obj_property name="ElementShortName">instruction[15:0]</obj_property>
+      <obj_property name="ObjectShortName">instruction[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_Risc16v1_2/dut/datapath/a_equ_b">
+      <obj_property name="ElementShortName">a_equ_b</obj_property>
+      <obj_property name="ObjectShortName">a_equ_b</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_Risc16v1_2/dut/datapath/regfile_alu/register_file/regfile">
+      <obj_property name="ElementShortName">regfile[7:0][15:0]</obj_property>
+      <obj_property name="ObjectShortName">regfile[7:0][15:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_Risc16v1_2/dut/controller/pc_load">
+      <obj_property name="ElementShortName">pc_load</obj_property>
+      <obj_property name="ObjectShortName">pc_load</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_Risc16v1_2/dut/controller/pc_sel">
+      <obj_property name="ElementShortName">pc_sel</obj_property>
+      <obj_property name="ObjectShortName">pc_sel</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_Risc16v1_2/dut/controller/reg_write">
+      <obj_property name="ElementShortName">reg_write</obj_property>
+      <obj_property name="ObjectShortName">reg_write</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_Risc16v1_2/dut/controller/imm7_op">
+      <obj_property name="ElementShortName">imm7_op</obj_property>
+      <obj_property name="ObjectShortName">imm7_op</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_Risc16v1_2/dut/controller/opcode">
+      <obj_property name="ElementShortName">opcode[2:0]</obj_property>
+      <obj_property name="ObjectShortName">opcode[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_Risc16v1_2/dut/controller/alu_op">
+      <obj_property name="ElementShortName">alu_op[1:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_op[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_Risc16v1_2/dut/controller/beq_cmd">
+      <obj_property name="ElementShortName">beq_cmd</obj_property>
+      <obj_property name="ObjectShortName">beq_cmd</obj_property>
+   </wvobject>
+</wave_config>

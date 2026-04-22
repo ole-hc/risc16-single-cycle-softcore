@@ -56,6 +56,7 @@ end component;
 component Risc16_controller is
     Port ( instruction : in STD_LOGIC_VECTOR (15 downto 0);
            a_equ_b : in STD_LOGIC;
+           reset : in std_logic;
            pc_load : out STD_LOGIC;
            pc_sel : out STD_LOGIC;
            reg_write : out STD_LOGIC;
@@ -94,6 +95,7 @@ datapath : Risc16_datapath port map (
 controller : Risc16_controller port map (
     instruction => instruction, 
     a_equ_b => a_equ_b,
+    reset => reset,
     pc_load => pc_load, 
     pc_sel => pc_sel,
     reg_write => reg_write,
