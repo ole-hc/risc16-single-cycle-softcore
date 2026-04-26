@@ -47,6 +47,7 @@ component Risc16_datapath is
            beq_cmd : in STD_LOGIC;
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
+           debug : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in STD_LOGIC_VECTOR (15 downto 0);
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
@@ -62,6 +63,7 @@ component Risc16_controller is
            imm7_op : out STD_LOGIC;
            alu_op : out STD_LOGIC_VECTOR (1 downto 0);
            beq_cmd : out STD_LOGIC;
+           debug : out std_logic;
            idle : out STD_LOGIC);
 end component;
 
@@ -70,7 +72,7 @@ component rom1k_16 is
            data : out STD_LOGIC_VECTOR (15 downto 0));
 end component;
 
-signal pc_load, pc_sel, beq_cmd, reg_write, imm7_op : std_logic := '0';
+signal pc_load, pc_sel, beq_cmd, reg_write, imm7_op, debug : std_logic := '0';
 signal alu_op : std_logic_vector(1 downto 0) := "00";
 signal instruction, ir_addr : std_logic_vector(15 downto 0) := (others => '0');
 signal a_equ_b : std_logic := '0';
@@ -85,6 +87,7 @@ datapath : Risc16_datapath port map (
     beq_cmd => beq_cmd,
     reg_write => reg_write, 
     imm7_op => imm7_op, 
+    debug => debug,
     alu_op => alu_op, 
     instruction => instruction, 
     ir_addr => ir_addr, 
@@ -100,7 +103,8 @@ controller : Risc16_controller port map (
     imm7_op => imm7_op,
     alu_op => alu_op, 
     beq_cmd => beq_cmd,
-    idle => idle
+    idle => idle,
+    debug => debug
 );
 
 rom : rom1k_16 port map (
