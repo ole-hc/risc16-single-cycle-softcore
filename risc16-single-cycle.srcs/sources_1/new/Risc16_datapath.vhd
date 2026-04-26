@@ -39,6 +39,7 @@ entity Risc16_datapath is
            beq_cmd : in STD_LOGIC;
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
+           debug : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in STD_LOGIC_VECTOR (15 downto 0);
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
@@ -63,11 +64,16 @@ component dp_alu_regfile is
            beq_cmd : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in std_logic_vector (15 downto 0);
+           debug : in std_logic;
+           debug_addr : in STD_LOGIC_VECTOR (2 downto 0);
+           debug_rega_out : out std_logic_vector(15 downto 0);
            a_equ_b : out STD_LOGIC;
            immediate16 : out std_logic_vector (15 downto 0));
 end component;
 
 signal immediate16 : std_logic_vector (15 downto 0) := (others => '0');
+signal debug_addr : STD_LOGIC_VECTOR (2 downto 0) := (others => '0');
+signal debug_rega_out : std_logic_vector(15 downto 0) := (others => '0');
 
 begin
 
@@ -81,6 +87,7 @@ regfile_alu : dp_alu_regfile port map (
     clk => clk, 
     reg_write => reg_write, imm7_op => imm7_op, beq_cmd => beq_cmd, 
     alu_op => alu_op, instruction => instruction, 
+    debug => debug, debug_addr => debug_addr, debug_rega_out => debug_rega_out,
     a_equ_b => a_equ_b, immediate16 => immediate16
 );
 
