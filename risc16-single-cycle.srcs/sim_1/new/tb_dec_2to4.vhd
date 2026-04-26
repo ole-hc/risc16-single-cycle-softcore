@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 04/26/2026 02:53:47 PM
+-- Create Date: 04/26/2026 02:58:30 PM
 -- Design Name: 
--- Module Name: dec_2to4 - Behavioral
+-- Module Name: tb_dec_2to4 - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -24,35 +24,41 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity dec_2to4 is
+entity tb_dec_2to4 is
+--  Port ( );
+end tb_dec_2to4;
+
+architecture Behavioral of tb_dec_2to4 is
+
+component dec_2to4 is
     Port ( data : in STD_LOGIC_VECTOR (1 downto 0);
            anode : out STD_LOGIC_VECTOR (3 downto 0));
-end dec_2to4;
+end component;
 
-architecture Behavioral of dec_2to4 is
+signal data : std_logic_vector(1 downto 0) := "00";
+signal anode : std_logic_vector(3 downto 0) := x"0";
 
 begin
 
-output : process(data) begin 
-    case data is
-        when "00" =>
-            anode <= "0001";
-        when "01" => 
-            anode <= "0010";
-        when "10" =>
-            anode <= "0100";
-        when "11" => 
-            anode <= "1000";
-        when others =>
-            anode <= "0000";
-    end case;
-end process output;
+dut : dec_2to4 port map (
+    data => data, 
+    anode => anode
+);
+
+stimulus : process begin
+    wait for 100ns;
+    
+    for index in 0 to 3 loop
+        data <= std_logic_vector(to_unsigned(index, 2));
+        wait for 10ns;
+    end loop;
+end process stimulus;
 
 end Behavioral;
