@@ -46,20 +46,21 @@ component Risc16_controller is
            imm7_op : out STD_LOGIC;
            alu_op : out STD_LOGIC_VECTOR (1 downto 0);
            beq_cmd : out STD_LOGIC;
+           debug : out std_logic;
            idle : out STD_LOGIC);
 end component;
 
 signal instruction : std_logic_vector (15 downto 0) := (others => '0');
 signal a_equ_b, pc_load, pc_sel, reg_write, imm7_op : std_logic := '0';
 signal alu_op : std_logic_vector (1 downto 0) := "00";
-signal beq_cmd, idle : std_logic := '0';
+signal beq_cmd, idle, debug : std_logic := '0';
 
 begin
 
 dut : Risc16_controller port map (
     instruction => instruction, a_equ_b => a_equ_b,
     pc_load => pc_load, pc_sel => pc_sel, reg_write => reg_write, imm7_op => imm7_op,
-    alu_op => alu_op, beq_cmd => beq_cmd, idle => idle
+    alu_op => alu_op, beq_cmd => beq_cmd, idle => idle, debug => debug
 );
 
 stimulus : process begin 

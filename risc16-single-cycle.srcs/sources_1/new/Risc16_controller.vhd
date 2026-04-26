@@ -40,6 +40,7 @@ entity Risc16_controller is
            imm7_op : out STD_LOGIC;
            alu_op : out STD_LOGIC_VECTOR (1 downto 0);
            beq_cmd : out STD_LOGIC;
+           debug : out std_logic;
            idle : out STD_LOGIC);
 end Risc16_controller;
 
@@ -62,6 +63,7 @@ output : process (opcode, a_equ_b) begin
             alu_op <= "00";
             beq_cmd <= '0';
             idle <= '0';
+            debug <= '0';
         -- addi
         when "001" =>
             pc_load <= '1';
@@ -71,6 +73,7 @@ output : process (opcode, a_equ_b) begin
             alu_op <= "00";
             beq_cmd <= '0';
             idle <= '0';
+            debug <= '0';
         -- beq
         when "110" =>
             pc_load <= '1';
@@ -80,6 +83,7 @@ output : process (opcode, a_equ_b) begin
             alu_op <= "10";
             beq_cmd <= '1';
             idle <= '0';
+            debug <= '0';
         -- halt
         when "111" =>
             pc_load <= '0';
@@ -88,10 +92,12 @@ output : process (opcode, a_equ_b) begin
             imm7_op <= '0';
             alu_op <= "00";
             beq_cmd <= '0';
-            idle <= '1';  
+            idle <= '1'; 
+            debug <= '1'; 
         -- unimplemented opcode 
         when others => 
             idle <= '1';
+            debug <= '1';
     end case;
 end process output;
     
