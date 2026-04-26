@@ -17,3 +17,6 @@ NONE :)
 
 ![Risc16v1_2_waveform](figures/Risc16v1_2_error.png)
 
+# Risc16 architecture block diagram
+
+![](figures/Risc16v1_2.drawio.svg)
