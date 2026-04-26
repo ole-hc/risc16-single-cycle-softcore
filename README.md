@@ -1,22 +1,52 @@
-# Potential Error sources
+# RISC16 Single-Cycle Processor | Basys3 FPGA
 
-- `a_equ_b` is not reset. It is only changed on a BEQ instruction and not changed back after the next one, etc.
+A 16-bit single-cycle RISC processor implemented in VHDL, targeting the Digilent Basys3 development board.
 
-- Signals like `a_equ_b` don't have a default value. They only change from U after the first time they are wrote. 
+---
 
-# Current ERRORs of Risc16v1_2
+## Architecture
 
-NONE :)
+![RISC16 Block Diagram](figures/Risc16v1_2.drawio.svg)
 
-# Past ERRORs of Risc16v1_2
+The processor follows a classic single-cycle datapath design with a 3-bit opcode space.
 
-- the controller only ever set the signals for the first "000" case
-	- the problem was in the controller file the sensitivity list of the output process contained `instruction` instead of `opcode`
-	- even though `opcode` was mapped to the upper three `instruction` bits outside of the process it was never set
-	- didnt really understand why possibly documented in https://www.vhdl-online.de/courses/system_design/vhdl_language_and_syntax/process_execution further investigation required for a deeper understanding of the simulation process
+### Clock Source
+The processor clock can be connected either to the Basys3 onboard system clock or to a pushbutton. Configurable via the constraints file.
 
-![Risc16v1_2_waveform](figures/Risc16v1_2_error.png)
+### Debug Mode
+When the processor halts (after a `HALT` instruction), it enters debug mode:
+- **LEDs** display the content of the register selected via switches 0–2
+- **7-segment display** always shows the current Program Counter value in hexadecimal (both in normal operation and debug mode)
 
-# Risc16 architecture block diagram
+---
 
-![](figures/Risc16v1_2.drawio.svg)
+## Todo
+
+1. Add 7-segment display logic to the processor
+2. Create the constraints file
+3. Implement missing instructions (`LW`, `SW`, etc.)
+
+---
+
+## Known Limitations & Potential Error Sources
+
+- `a_equ_b` is not reset between instructions — it retains its value from the last `BEQ` and is not cleared until the next `BEQ` executes.
+- Signals like `a_equ_b` have no default value and remain uninitialized (`U`) until first written.
+
+---
+
+## Lessons Learned
+
+### VHDL Process Sensitivity Lists
+
+**Symptom:** The controller only ever produced outputs for the first `"000"` opcode case, regardless of the actual instruction being decoded.
+
+**Investigation:** The waveform below shows the controller outputs frozen despite changing instructions.
+
+![Waveform showing controller bug](figures/Risc16v1_2_error.png)
+
+**Root cause:** The sensitivity list of the output process contained `instruction` instead of `opcode`. Even though `opcode` was correctly assigned to the upper three bits of `instruction` outside the process, the process itself never re-evaluated when `opcode` changed.
+
+**Fix:** Replace `instruction` with `opcode` in the sensitivity list of the output process.
+
+**Takeaway:** In VHDL, a process only re-evaluates when a signal in its sensitivity list changes. Derived signals assigned outside a process are not automatically tracked — always list the signals the process *actually reads*, not their sources. See [vhdl-online.de | Process Execution](https://www.vhdl-online.de/courses/system_design/vhdl_language_and_syntax/process_execution) for further background.
