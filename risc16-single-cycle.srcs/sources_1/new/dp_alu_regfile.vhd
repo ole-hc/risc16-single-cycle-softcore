@@ -38,6 +38,9 @@ entity dp_alu_regfile is
            beq_cmd : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in std_logic_vector (15 downto 0);
+           debug : in std_logic;
+           debug_addr : in STD_LOGIC_VECTOR (2 downto 0);
+           debug_rega_out : out std_logic_vector(15 downto 0);
            a_equ_b : out STD_LOGIC;
            immediate16 : out std_logic_vector (15 downto 0));
 end dp_alu_regfile;
@@ -89,7 +92,6 @@ signal alu_b, imm16_input : std_logic_vector (15 downto 0) := (others => '0');
 begin
 
 c_addr <= instruction(12 downto 10);
-a_addr <= instruction(9 downto 7);
 immediate <= instruction(6 downto 0);
 
 mux_beq : mux_2to1 generic map (data_width => 3)
@@ -102,6 +104,13 @@ register_file : regfile port map (
     clk => clk, reg_write => reg_write, 
     a_addr => a_addr, b_addr => b_addr, c_addr => c_addr,
     a_data => a_data, b_data => b_data, c_data => c_data
+);
+
+mux_a_debug : mux_2to1 generic map (data_width => 3)
+port map (
+    a => instruction(9 downto 7), b => debug_addr,
+    sel => debug, 
+    y => a_addr
 );
 
 extender_2k : extender2k port map (
@@ -118,6 +127,12 @@ mux_b_imm : mux_2to1 port map (
 alu16 : alu port map (
     a => a_data, b => alu_b, alu_op => alu_op,
     c => c_data, a_equ_b => a_equ_b
+);
+
+debug_mux : mux_2to1 port map (
+    a => x"0000", b => a_data, 
+    sel => debug,
+    y => debug_rega_out
 );
 
 immediate16 <= imm16_input;
