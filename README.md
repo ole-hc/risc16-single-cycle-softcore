@@ -25,9 +25,11 @@ When the processor halts (after a `HALT` instruction), it enters debug mode:
 
 ## Todo
 
-1. Add 7-segment display logic to the processor
+1. Add 7-segment display logic to the processor (DONE)
 2. Create the constraints file
+	- Current errors: only toplevel ports can be mapped in the constraints file --> lower level ports have to be routet upwards.
 3. Implement missing instructions (`LW`, `SW`, etc.)
+4. Add build tcl script
 
 ---
 
@@ -53,3 +55,8 @@ When the processor halts (after a `HALT` instruction), it enters debug mode:
 **Fix:** Replace `instruction` with `opcode` in the sensitivity list of the output process.
 
 **Takeaway:** In VHDL, a process only re-evaluates when a signal in its sensitivity list changes. Derived signals assigned outside a process are not automatically tracked — always list the signals the process *actually reads*, not their sources. See [vhdl-online.de | Process Execution](https://www.vhdl-online.de/courses/system_design/vhdl_language_and_syntax/process_execution) for further background.
+
+### Constraint file
+
+Only ports of the top level entity can be mapped to the constraint file. This means if you want to connect the debug_addr - which are needed by the `dp_alu_regfile` entity - you have to connect the signal throug every layer of the Risc16v1_2 entity. 
+This not only adds much overhead to the different layers but also reduces reusablity of the different modules.  

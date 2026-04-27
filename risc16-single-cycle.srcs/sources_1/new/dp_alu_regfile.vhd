@@ -130,7 +130,7 @@ alu16 : alu port map (
 );
 
 debug_mux : mux_2to1 port map (
-    a => x"0000", b => a_data, 
+    a => instruction, b => a_data, 
     sel => debug,
     y => debug_rega_out
 );

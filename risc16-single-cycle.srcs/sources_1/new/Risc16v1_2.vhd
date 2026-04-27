@@ -72,10 +72,22 @@ component rom1k_16 is
            data : out STD_LOGIC_VECTOR (15 downto 0));
 end component;
 
+component dec_16bit_to_7seg is
+    Port ( data : in STD_LOGIC_VECTOR (15 downto 0);
+           clk : in STD_LOGIC;
+           cathode : out STD_LOGIC_VECTOR (7 downto 0);
+           anode : out STD_LOGIC_VECTOR (3 downto 0));
+end component;
+
 signal pc_load, pc_sel, beq_cmd, reg_write, imm7_op, debug : std_logic := '0';
 signal alu_op : std_logic_vector(1 downto 0) := "00";
 signal instruction, ir_addr : std_logic_vector(15 downto 0) := (others => '0');
 signal a_equ_b : std_logic := '0';
+
+-- 7segment
+signal basys3_clk : std_logic := '0';
+signal cathode : std_logic_vector(7 downto 0) := (others => '0');
+signal anode : std_logic_vector(3 downto 0) := (others => '0');
 
 begin
 
@@ -110,6 +122,13 @@ controller : Risc16_controller port map (
 rom : rom1k_16 port map (
     addr => ir_addr(9 downto 0),
     data => instruction
+);
+
+dec_7segment : dec_16bit_to_7seg port map (
+    data => ir_addr, 
+    clk => basys3_clk,
+    cathode => cathode,
+    anode => anode
 );
 
 end Structural;
