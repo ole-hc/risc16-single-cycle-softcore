@@ -14,9 +14,12 @@ The processor follows a classic single-cycle datapath design with a 3-bit opcode
 The processor clock can be connected either to the Basys3 onboard system clock or to a pushbutton. Configurable via the constraints file.
 
 ### Debug Mode
+
+- **LEDs** display the current instruction from left to right
+- **7-segment display** always shows the current Program Counter value in hexadecimal (both in normal operation and debug mode)
+
 When the processor halts (after a `HALT` instruction), it enters debug mode:
 - **LEDs** display the content of the register selected via switches 0–2
-- **7-segment display** always shows the current Program Counter value in hexadecimal (both in normal operation and debug mode)
 
 ---
 
