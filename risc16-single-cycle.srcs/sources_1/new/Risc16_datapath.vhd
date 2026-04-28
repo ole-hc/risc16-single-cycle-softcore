@@ -39,11 +39,13 @@ entity Risc16_datapath is
            beq_cmd : in STD_LOGIC;
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
-           debug : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in STD_LOGIC_VECTOR (15 downto 0);
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
-           a_equ_b : out STD_LOGIC);
+           a_equ_b : out STD_LOGIC;
+           debug : in std_logic;
+           debug_addr : in std_logic_vector(2 downto 0);
+           debug_rega_out : out std_logic_vector(15 downto 0));
 end Risc16_datapath;
 
 architecture Structural of Risc16_datapath is
@@ -72,8 +74,8 @@ component dp_alu_regfile is
 end component;
 
 signal immediate16 : std_logic_vector (15 downto 0) := (others => '0');
-signal debug_addr : STD_LOGIC_VECTOR (2 downto 0) := (others => '0');
-signal debug_rega_out : std_logic_vector(15 downto 0) := (others => '0');
+-- signal debug_addr : STD_LOGIC_VECTOR (2 downto 0) := (others => '0');
+-- signal debug_rega_out : std_logic_vector(15 downto 0) := (others => '0');
 
 begin
 

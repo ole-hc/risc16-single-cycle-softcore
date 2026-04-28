@@ -47,16 +47,19 @@ component Risc16_datapath is
            beq_cmd : in STD_LOGIC;
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
-           debug : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in STD_LOGIC_VECTOR (15 downto 0);
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
-           a_equ_b : out STD_LOGIC);
-end component;
+           a_equ_b : out STD_LOGIC;
+           debug : in std_logic;
+           debug_addr : in std_logic_vector(2 downto 0);
+           debug_rega_out : out std_logic_vector(15 downto 0));
+end component; 
 
 signal clk, reset, pc_load, pc_sel, beq_cmd, reg_write, imm7_op, debug : std_logic := '0';
 signal alu_op : std_logic_vector (1 downto 0) := (others => '0');
-signal instruction, ir_addr : std_logic_vector (15 downto 0) := (others => '0');
+signal debug_addr : std_logic_vector(2 downto 0) := (others => '0');
+signal instruction, ir_addr, debug_rega_out : std_logic_vector (15 downto 0) := (others => '0');
 signal a_equ_b : std_logic := '0';
 
 begin
@@ -65,8 +68,9 @@ dut : Risc16_datapath port map (
     clk => clk, reset => reset,
     pc_load => pc_load, pc_sel => pc_sel,
     beq_cmd => beq_cmd, reg_write => reg_write, imm7_op => imm7_op, 
-    debug => debug, alu_op => alu_op, instruction => instruction,
-    ir_addr => ir_addr, a_equ_b => a_equ_b
+    alu_op => alu_op, instruction => instruction,
+    ir_addr => ir_addr, a_equ_b => a_equ_b,
+    debug => debug, debug_addr => debug_addr, debug_rega_out => debug_rega_out
 );
 
 timing : process begin
