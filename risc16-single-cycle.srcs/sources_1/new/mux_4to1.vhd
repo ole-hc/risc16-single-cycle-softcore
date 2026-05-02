@@ -45,7 +45,7 @@ architecture Behavioral of mux_4to1 is
 
 begin
 
-output : process (a, b, sel) begin
+output : process (a, b, c, d, sel) begin
     case sel is
         when "00" => 
             y <= a;

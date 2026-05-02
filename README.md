@@ -11,7 +11,7 @@ A 16-bit single-cycle RISC processor implemented in VHDL, targeting the Digilent
 The processor follows a classic single-cycle datapath design with a 3-bit opcode space.
 
 ### Clock Source
-The processor clock can be connected either to the Basys3 onboard system clock or to a pushbutton. Configurable via the constraints file.
+The processor has two clocks. One for the 7-Segment-multiplexing (default: 20Mhz) and one system clk (default 5MHz). This is implemented through the clocking wizard IP. 
 
 ### Debug Mode
 
@@ -25,11 +25,9 @@ When the processor halts (after a `HALT` instruction), it enters debug mode:
 
 ## Todo
 
-1. Add 7-segment display logic to the processor (DONE)
-2. Create the constraints file
-	- Current errors: only toplevel ports can be mapped in the constraints file --> lower level ports have to be routet upwards.
-3. Implement missing instructions (`LW`, `SW`, etc.)
-4. Add build tcl script
+1. Fix 7-segment display - probably ghosting or simmilar see: https://electronics.stackexchange.com/questions/365130/ghosting-on-7-segment-display
+2. Implement missing instructions (`LW`, `SW`, etc.)
+3. Add build tcl script
 
 ---
 
@@ -50,13 +48,24 @@ When the processor halts (after a `HALT` instruction), it enters debug mode:
 
 ![Waveform showing controller bug](figures/Risc16v1_2_error.png)
 
-**Root cause:** The sensitivity list of the output process contained `instruction` instead of `opcode`. Even though `opcode` was correctly assigned to the upper three bits of `instruction` outside the process, the process itself never re-evaluated when `opcode` changed.
+**Root cause:** The sensitivity list of the output process contained `instruction` instead of `opcode`. Even though `opcode` was correctly assigned to the upper three bits of `instruction` outside the process, the simulation never picked up on the change.
 
 **Fix:** Replace `instruction` with `opcode` in the sensitivity list of the output process.
 
-**Takeaway:** In VHDL, a process only re-evaluates when a signal in its sensitivity list changes. Derived signals assigned outside a process are not automatically tracked — always list the signals the process *actually reads*, not their sources. See [vhdl-online.de | Process Execution](https://www.vhdl-online.de/courses/system_design/vhdl_language_and_syntax/process_execution) for further background.
+**Takeaway:** Still not sure how the simulation works see: [vhdl-online.de | Process Execution](https://www.vhdl-online.de/courses/system_design/vhdl_language_and_syntax/process_execution) for further background.
 
 ### Constraint file
 
 Only ports of the top level entity can be mapped to the constraint file. This means if you want to connect the debug_addr - which are needed by the `dp_alu_regfile` entity - you have to connect the signal throug every layer of the Risc16v1_2 entity. 
 This not only adds much overhead to the different layers but also reduces reusablity of the different modules.  
+
+Clk signal can not be mapped to a button or simmilar. This happens because vivado doesnt allow buttons as they are not stable clk sources. You would then have to debounce the button yourself.
+
+Every toplevel port has to be mapped to the constraints file!
+
+--- 
+
+Combinatory loops can be caused as the instruction is partly mapped to itself through the beq commands hardware implementation (eg. 2k extender, imm16, mux). This has to be disabled through the constraints file.
+
+### IP Integration
+I have integrated my first IP into a project. I used the clocking_wizard IP to split my 100MHz system clk into on clock for the 7semgent multiplexing and one for the processor.

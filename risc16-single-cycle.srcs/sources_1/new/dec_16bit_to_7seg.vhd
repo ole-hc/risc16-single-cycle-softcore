@@ -67,6 +67,8 @@ end component;
 
 signal a, b, c, d, current_hex : std_logic_vector(3 downto 0) := x"0";
 signal sel : std_logic_vector(1 downto 0) := "00";
+signal internal_cathode : std_logic_vector(7 downto 0) := (others => '1');
+signal internal_anode : std_logic_vector(3 downto 0) := (others => '1');
 
 begin
 
@@ -82,8 +84,9 @@ counter : counter_2bit port map (
 
 decode_anode : dec_2to4 port map (
     data => sel,
-    anode => anode
+    anode => internal_anode
 );
+anode <= not internal_anode;
 
 input_mux : mux_4to1 
 generic map (
@@ -96,7 +99,8 @@ port map (
 
 hex_decoder : dec_hexto7seg port map (
     hex => current_hex,
-    cathode => cathode
+    cathode => internal_cathode
 );
+cathode <= not internal_cathode;
 
 end Structural;

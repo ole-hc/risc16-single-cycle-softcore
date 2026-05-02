@@ -40,17 +40,29 @@ architecture Behavioral of tb_Risc16v1_2 is
 component Risc16v1_2 is
     Port ( reset : in STD_LOGIC;
            clk : in STD_LOGIC;
-           idle : out STD_LOGIC);
+           idle : out STD_LOGIC;
+           debug_addr : in std_logic_vector(2 downto 0);
+           debug_rega_out : out std_logic_vector(15 downto 0);
+           anode : out std_logic_vector(3 downto 0);
+           cathode : out std_logic_vector(7 downto 0));
 end component;
 
 signal reset, clk, idle : std_logic := '0';
+signal debug_addr : std_logic_vector(2 downto 0) := (others => '0');
+signal debug_rega_out : std_logic_vector(15 downto 0) := (others => '0');
+signal anode : std_logic_vector(3 downto 0) := (others => '0');
+signal cathode : std_logic_vector(7 downto 0) := (others => '0');
 
 begin
 
 dut : Risc16v1_2 port map (
     reset => reset,
     clk => clk, 
-    idle => idle
+    idle => idle,
+    debug_addr => debug_addr,
+    debug_rega_out => debug_rega_out,
+    anode => anode,
+    cathode => cathode
 );
 
 timing : process begin 
@@ -64,7 +76,7 @@ stimulus : process begin
     wait for 1ps;
     reset <= '0';
     
-    wait for 500ns;
+    wait;
 end process stimulus;
 
 end Behavioral;

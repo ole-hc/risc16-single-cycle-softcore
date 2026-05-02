@@ -5,37 +5,37 @@
 
 # Clock signal
 #Bank = 34, Pin name = ,					Sch name = CLK100MHZ
-set_property PACKAGE_PIN W5 [get_ports basys3_clk]
-set_property IOSTANDARD LVCMOS33 [get_ports basys3_clk]
-create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports basys3_clk]
+set_property PACKAGE_PIN W5 [get_ports clk]
+set_property IOSTANDARD LVCMOS33 [get_ports clk]
+create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports clk]
 
 # Switches
-set_property PACKAGE_PIN V17 [get_ports {SW[0]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {SW[0]}]
-set_property PACKAGE_PIN V16 [get_ports {SW[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {SW[1]}]
-set_property PACKAGE_PIN W16 [get_ports {SW[2]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {SW[2]}]
-set_property PACKAGE_PIN W17 [get_ports {SW[3]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {SW[3]}]
-set_property PACKAGE_PIN W15 [get_ports {SW[4]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {SW[4]}]
-set_property PACKAGE_PIN V15 [get_ports {SW[5]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {SW[5]}]
-set_property PACKAGE_PIN W14 [get_ports {SW[6]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {SW[6]}]
-set_property PACKAGE_PIN W13 [get_ports {SW[7]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {SW[7]}]
-set_property PACKAGE_PIN V2 [get_ports {SW[8]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {SW[8]}]
-set_property PACKAGE_PIN T3 [get_ports {SW[9]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {SW[9]}]
-set_property PACKAGE_PIN T2 [get_ports {SW[10]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {SW[10]}]
-set_property PACKAGE_PIN R3 [get_ports {SW[11]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {SW[11]}]
-set_property PACKAGE_PIN W2 [get_ports {SW[12]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {SW[12]}]
+#set_property PACKAGE_PIN V17 [get_ports {SW[0]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {SW[0]}]
+#set_property PACKAGE_PIN V16 [get_ports {SW[1]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {SW[1]}]
+#set_property PACKAGE_PIN W16 [get_ports {SW[2]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {SW[2]}]
+#set_property PACKAGE_PIN W17 [get_ports {SW[3]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {SW[3]}]
+#set_property PACKAGE_PIN W15 [get_ports {SW[4]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {SW[4]}]
+#set_property PACKAGE_PIN V15 [get_ports {SW[5]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {SW[5]}]
+#set_property PACKAGE_PIN W14 [get_ports {SW[6]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {SW[6]}]
+#set_property PACKAGE_PIN W13 [get_ports {SW[7]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {SW[7]}]
+#set_property PACKAGE_PIN V2 [get_ports {SW[8]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {SW[8]}]
+#set_property PACKAGE_PIN T3 [get_ports {SW[9]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {SW[9]}]
+#set_property PACKAGE_PIN T2 [get_ports {SW[10]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {SW[10]}]
+#set_property PACKAGE_PIN R3 [get_ports {SW[11]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {SW[11]}]
+#set_property PACKAGE_PIN W2 [get_ports {SW[12]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {SW[12]}]
 set_property PACKAGE_PIN U1 [get_ports {debug_addr[2]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {debug_addr[2]}]
 set_property PACKAGE_PIN T1 [get_ports {debug_addr[1]}]
@@ -122,20 +122,20 @@ set_property IOSTANDARD LVCMOS33 [get_ports {anode[3]}]
 
 #Buttons
 #Bank = 14, Pin name = ,					Sch name = BTNC
-set_property PACKAGE_PIN U18 [get_ports {BTN[4]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {BTN[4]}]
-#Bank = 14, Pin name = ,					Sch name = BTNU
-set_property PACKAGE_PIN T18 [get_ports {clk}]
-set_property IOSTANDARD LVCMOS33 [get_ports {clk}]
-#Bank = 14, Pin name = ,	Sch name = BTNL
-set_property PACKAGE_PIN W19 [get_ports {BTN[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {BTN[1]}]
-#Bank = 14, Pin name = ,							Sch name = BTNR
-set_property PACKAGE_PIN T17 [get_ports {BTN[2]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {BTN[2]}]
-#Bank = 14, Pin name = ,					Sch name = BTND
-set_property PACKAGE_PIN U17 [get_ports {reset}]
+set_property PACKAGE_PIN U18 [get_ports {reset}]
 set_property IOSTANDARD LVCMOS33 [get_ports {reset}]
+#Bank = 14, Pin name = ,					Sch name = BTNU
+#set_property PACKAGE_PIN T18 [get_ports {BTN[1]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {BTN[1]}]
+#Bank = 14, Pin name = ,	Sch name = BTNL
+#set_property PACKAGE_PIN W19 [get_ports {BTN[1]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {BTN[1]}]
+#Bank = 14, Pin name = ,							Sch name = BTNR
+#set_property PACKAGE_PIN T17 [get_ports {BTN[2]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {BTN[2]}]
+#Bank = 14, Pin name = ,					Sch name = BTND
+#set_property PACKAGE_PIN U17 [get_ports {BTN[1]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {BTN[1]}]
 
 
 
@@ -252,47 +252,47 @@ set_property IOSTANDARD LVCMOS33 [get_ports {reset}]
 
 #VGA Connector
 #Bank = 14, Pin name = ,					Sch name = VGA_R0
-set_property PACKAGE_PIN G19 [get_ports {VGA_RED[0]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {VGA_RED[0]}]
+#set_property PACKAGE_PIN G19 [get_ports {VGA_RED[0]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {VGA_RED[0]}]
 #Bank = 14, Pin name = ,					Sch name = VGA_R1
-set_property PACKAGE_PIN H19 [get_ports {VGA_RED[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {VGA_RED[1]}]
+#set_property PACKAGE_PIN H19 [get_ports {VGA_RED[1]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {VGA_RED[1]}]
 #Bank = 14, Pin name = ,					Sch name = VGA_R2
-set_property PACKAGE_PIN J19 [get_ports {VGA_RED[2]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {VGA_RED[2]}]
+#set_property PACKAGE_PIN J19 [get_ports {VGA_RED[2]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {VGA_RED[2]}]
 #Bank = 14, Pin name = ,					Sch name = VGA_R3
-set_property PACKAGE_PIN N19 [get_ports {VGA_RED[3]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {VGA_RED[3]}]
+#set_property PACKAGE_PIN N19 [get_ports {VGA_RED[3]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {VGA_RED[3]}]
 #Bank = 14, Pin name = ,					Sch name = VGA_B0
-set_property PACKAGE_PIN N18 [get_ports {VGA_BLUE[0]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {VGA_BLUE[0]}]
+#set_property PACKAGE_PIN N18 [get_ports {VGA_BLUE[0]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {VGA_BLUE[0]}]
 #Bank = 14, Pin name = ,						Sch name = VGA_B1
-set_property PACKAGE_PIN L18 [get_ports {VGA_BLUE[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {VGA_BLUE[1]}]
+#set_property PACKAGE_PIN L18 [get_ports {VGA_BLUE[1]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {VGA_BLUE[1]}]
 #Bank = 14, Pin name = ,					Sch name = VGA_B2
-set_property PACKAGE_PIN K18 [get_ports {VGA_BLUE[2]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {VGA_BLUE[2]}]
+#set_property PACKAGE_PIN K18 [get_ports {VGA_BLUE[2]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {VGA_BLUE[2]}]
 #Bank = 14, Pin name = ,						Sch name = VGA_B3
-set_property PACKAGE_PIN J18 [get_ports {VGA_BLUE[3]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {VGA_BLUE[3]}]
+#set_property PACKAGE_PIN J18 [get_ports {VGA_BLUE[3]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {VGA_BLUE[3]}]
 #Bank = 14, Pin name = ,					Sch name = VGA_G0
-set_property PACKAGE_PIN J17 [get_ports {VGA_GREEN[0]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {VGA_GREEN[0]}]
+#set_property PACKAGE_PIN J17 [get_ports {VGA_GREEN[0]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {VGA_GREEN[0]}]
 #Bank = 14, Pin name = ,				Sch name = VGA_G1
-set_property PACKAGE_PIN H17 [get_ports {VGA_GREEN[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {VGA_GREEN[1]}]
+#set_property PACKAGE_PIN H17 [get_ports {VGA_GREEN[1]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {VGA_GREEN[1]}]
 #Bank = 14, Pin name = ,					Sch name = VGA_G2
-set_property PACKAGE_PIN G17 [get_ports {VGA_GREEN[2]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {VGA_GREEN[2]}]
+#set_property PACKAGE_PIN G17 [get_ports {VGA_GREEN[2]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {VGA_GREEN[2]}]
 #Bank = 14, Pin name = ,				Sch name = VGA_G3
-set_property PACKAGE_PIN D17 [get_ports {VGA_GREEN[3]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {VGA_GREEN[3]}]
+#set_property PACKAGE_PIN D17 [get_ports {VGA_GREEN[3]}]
+#set_property IOSTANDARD LVCMOS33 [get_ports {VGA_GREEN[3]}]
 #Bank = 14, Pin name = ,						Sch name = VGA_HS
-set_property PACKAGE_PIN P19 [get_ports VGA_HS]
-set_property IOSTANDARD LVCMOS33 [get_ports VGA_HS]
+#set_property PACKAGE_PIN P19 [get_ports VGA_HS]
+#set_property IOSTANDARD LVCMOS33 [get_ports VGA_HS]
 #Bank = 14, Pin name = ,				Sch name = VGA_VS
-set_property PACKAGE_PIN R19 [get_ports VGA_VS]
-set_property IOSTANDARD LVCMOS33 [get_ports VGA_VS]
+#set_property PACKAGE_PIN R19 [get_ports VGA_VS]
+#set_property IOSTANDARD LVCMOS33 [get_ports VGA_VS]
 
 
 ##USB-RS232 Interface
@@ -300,20 +300,20 @@ set_property IOSTANDARD LVCMOS33 [get_ports VGA_VS]
 #set_property PACKAGE_PIN B18 [get_ports RsRx]
 #set_property IOSTANDARD LVCMOS33 [get_ports RsRx]
 #Bank = 16, Pin name = ,					Sch name = UART_RXD_OUT
-set_property PACKAGE_PIN A18 [get_ports UART_TXD]
-set_property IOSTANDARD LVCMOS33 [get_ports UART_TXD]
+set_property PACKAGE_PIN A18 [get_ports idle]
+set_property IOSTANDARD LVCMOS33 [get_ports idle]
 
 
 
 #USB HID (PS/2)
 #Bank = 16, Pin name = ,					Sch name = PS2_CLK
-set_property PACKAGE_PIN C17 [get_ports PS2_CLK]
-set_property IOSTANDARD LVCMOS33 [get_ports PS2_CLK]
-set_property PULLUP true [get_ports PS2_CLK]
+#set_property PACKAGE_PIN C17 [get_ports PS2_CLK]
+#set_property IOSTANDARD LVCMOS33 [get_ports PS2_CLK]
+#set_property PULLUP true [get_ports PS2_CLK]
 #Bank = 16, Pin name = ,					Sch name = PS2_DATA
-set_property PACKAGE_PIN B17 [get_ports PS2_DATA]
-set_property IOSTANDARD LVCMOS33 [get_ports PS2_DATA]
-set_property PULLUP true [get_ports PS2_DATA]
+#set_property PACKAGE_PIN B17 [get_ports PS2_DATA]
+#set_property IOSTANDARD LVCMOS33 [get_ports PS2_DATA]
+#set_property PULLUP true [get_ports PS2_DATA]
 
 
 
