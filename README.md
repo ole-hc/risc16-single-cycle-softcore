@@ -70,3 +70,7 @@ Combinatory loops can be caused as the instruction is partly mapped to itself th
 
 ### IP Integration
 I have integrated my first IP into a project. I used the clocking_wizard IP to split my 100MHz system clk into on clock for the 7semgent multiplexing and one for the processor.
+
+### Seven Segment Display
+When trying to display a number across all four seven segment displays it is important that the clocking frequency isnt too high or else all of the displays will be completly lit. A 1kHz frequency is ideal - 15ms for each display.
+7segment disaply works with inverted - low active - signals.
