@@ -40,13 +40,18 @@ architecture Behavioral of counter_2bit is
 
 begin
 
-count : process (clk)  
-    variable value : integer range 0 to 3;
-    begin
-    if (rising_edge(clk)) then
-        value := value + 1;
+process (clk)
+    variable prescaler : integer range 0 to 99999 := 0;
+    variable seg7_cnt : unsigned(1 downto 0) := (others => '0');
+begin
+    if rising_edge(clk) then
+        if prescaler = 99999 then           -- 100MHz / 100000 = 1kHz
+            prescaler := 0;
+            seg7_cnt := seg7_cnt + 1;
+        else
+            prescaler := prescaler + 1;
+        end if;
     end if;
-    q <= std_logic_vector(to_unsigned(value, 2));
-end process count;
-
+    q <= std_logic_vector(seg7_cnt);
+end process;
 end Behavioral;

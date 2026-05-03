@@ -11,7 +11,7 @@ A 16-bit single-cycle RISC processor implemented in VHDL, targeting the Digilent
 The processor follows a classic single-cycle datapath design with a 3-bit opcode space.
 
 ### Clock Source
-The processor has two clocks. One for the 7-Segment-multiplexing (default: 20Mhz) and one system clk (default 5MHz). This is implemented through the clocking wizard IP. 
+The processor has two clocks. One for the 7-Segment-multiplexing (default: 100Mhz) which gets turned into 1kHz in the dec_16bit_to_7seg entity and one system clk (default 5MHz). This is implemented through the clocking wizard IP. 
 
 ### Debug Mode
 
@@ -26,7 +26,8 @@ When the processor halts (after a `HALT` instruction), it enters debug mode:
 ## Todo
 
 1. Fix 7-segment display - probably ghosting or simmilar see: https://electronics.stackexchange.com/questions/365130/ghosting-on-7-segment-display
-2. Implement missing instructions (`LW`, `SW`, etc.)
+2. Adjust Block Diagram for inverted 7segment signals 
+3. Implement missing instructions (`LW`, `SW`, etc.)
 3. Add build tcl script
 
 ---
