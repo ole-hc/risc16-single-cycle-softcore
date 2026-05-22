@@ -25,10 +25,8 @@ When the processor halts (after a `HALT` instruction), it enters debug mode:
 
 ## Todo
 
-1. Fix 7-segment display - probably ghosting or simmilar see: https://electronics.stackexchange.com/questions/365130/ghosting-on-7-segment-display
-2. Adjust Block Diagram for inverted 7segment signals 
-3. Implement missing instructions (`LW`, `SW`, etc.)
-3. Add build tcl script
+1. Implement missing instructions (`LW`, `SW`, etc.)
+2. Add build tcl script
 
 ---
 
