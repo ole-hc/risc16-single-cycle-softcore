@@ -30,6 +30,14 @@ When the processor halts (after a `HALT` instruction), it enters debug mode:
 
 ---
 
+## File Hirarchy
+
+Risc16v2 - Controller, Datapath Harvard architecture with all risc16 commands implemented
+
+-- not working anymore -- just test during build
+Risc16v1_1 - first test of datapath and rom with controller implemented in testbench
+Risc16v1_2 - Controller, Datapath and Rom with cmd: add, addi, beq, halt
+
 ## Known Limitations & Potential Error Sources
 
 - `a_equ_b` is not reset between instructions — it retains its value from the last `BEQ` and is not cleared until the next `BEQ` executes.
