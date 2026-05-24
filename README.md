@@ -6,7 +6,7 @@ A 16-bit single-cycle RISC processor implemented in VHDL, targeting the Digilent
 
 ## Architecture
 
-![RISC16 Block Diagram](figures/Risc16v1_2.drawio.svg)
+![RISC16 Block Diagram](figures/Risc16v2.svg)
 
 The processor follows a classic single-cycle datapath design with a 3-bit opcode space.
 
