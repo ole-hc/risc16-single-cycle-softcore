@@ -36,12 +36,16 @@ entity dp_alu_regfile is
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
            beq_cmd : in std_logic;
+           mem_to_reg : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in std_logic_vector (15 downto 0);
+           ram_data : in std_logic_vector (15 downto 0);
            debug : in std_logic;
            debug_addr : in STD_LOGIC_VECTOR (2 downto 0);
            debug_rega_out : out std_logic_vector(15 downto 0);
            a_equ_b : out STD_LOGIC;
+           alu_out : out std_logic_vector (15 downto 0);
+           rega_out : out std_logic_vector (15 downto 0);
            immediate16 : out std_logic_vector (15 downto 0));
 end dp_alu_regfile;
 
@@ -89,6 +93,9 @@ signal immediate : std_logic_vector(6 downto 0) := (others => '0');
 -- mux2to1 
 signal alu_b, imm16_input : std_logic_vector (15 downto 0) := (others => '0');
 
+-- mux mem_to_reg
+signal alu_output : std_logic_vector (15 downto 0) := (others => '0');
+
 begin
 
 c_addr <= instruction(12 downto 10);
@@ -126,7 +133,14 @@ mux_b_imm : mux_2to1 port map (
 
 alu16 : alu port map (
     a => a_data, b => alu_b, alu_op => alu_op,
-    c => c_data, a_equ_b => a_equ_b
+    c => alu_output, a_equ_b => a_equ_b
+);
+
+ram_mux : mux_2to1 port map (
+    a => alu_output, 
+    b => ram_data,
+    sel => mem_to_reg,
+    y => c_data
 );
 
 debug_mux : mux_2to1 port map (
@@ -136,5 +150,7 @@ debug_mux : mux_2to1 port map (
 );
 
 immediate16 <= imm16_input;
+alu_out <= alu_output;
+rega_out <= a_data;
 
 end Structural;

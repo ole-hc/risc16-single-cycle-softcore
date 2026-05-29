@@ -41,6 +41,10 @@ entity Risc16_datapath is
            imm7_op : in STD_LOGIC;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in STD_LOGIC_VECTOR (15 downto 0);
+           mem_to_reg : in std_logic;
+           ram_data : in STD_LOGIC_VECTOR (15 downto 0);
+           alu_out : out STD_LOGIC_VECTOR (15 downto 0);
+           rega_out : out STD_LOGIC_VECTOR (15 downto 0);
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
            a_equ_b : out STD_LOGIC;
            debug : in std_logic;
@@ -64,12 +68,16 @@ component dp_alu_regfile is
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
            beq_cmd : in std_logic;
+           mem_to_reg : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in std_logic_vector (15 downto 0);
+           ram_data : in std_logic_vector (15 downto 0);
            debug : in std_logic;
            debug_addr : in STD_LOGIC_VECTOR (2 downto 0);
            debug_rega_out : out std_logic_vector(15 downto 0);
            a_equ_b : out STD_LOGIC;
+           alu_out : out std_logic_vector (15 downto 0);
+           rega_out : out std_logic_vector (15 downto 0);
            immediate16 : out std_logic_vector (15 downto 0));
 end component;
 
@@ -88,7 +96,8 @@ programm_counter : prog_counter port map (
 regfile_alu : dp_alu_regfile port map (
     clk => clk, 
     reg_write => reg_write, imm7_op => imm7_op, beq_cmd => beq_cmd, 
-    alu_op => alu_op, instruction => instruction, 
+    alu_op => alu_op, instruction => instruction, mem_to_reg => mem_to_reg,
+    ram_data => ram_data, alu_out => alu_out, rega_out => rega_out,
     debug => debug, debug_addr => debug_addr, debug_rega_out => debug_rega_out,
     a_equ_b => a_equ_b, immediate16 => immediate16
 );

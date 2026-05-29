@@ -42,26 +42,31 @@ component dp_alu_regfile is
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
            beq_cmd : in std_logic;
+           mem_to_reg : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in std_logic_vector (15 downto 0);
+           ram_data : in std_logic_vector (15 downto 0);
            debug : in std_logic;
            debug_addr : in STD_LOGIC_VECTOR (2 downto 0);
            debug_rega_out : out std_logic_vector(15 downto 0);
            a_equ_b : out STD_LOGIC;
+           alu_out : out std_logic_vector (15 downto 0);
+           rega_out : out std_logic_vector (15 downto 0);
            immediate16 : out std_logic_vector (15 downto 0));
 end component;
 
-signal clk, reg_write, imm7_op, a_equ_b, beq_cmd, debug : std_logic := '0';
+signal clk, reg_write, imm7_op, a_equ_b, beq_cmd, debug, mem_to_reg : std_logic := '0';
 signal alu_op : std_logic_vector(1 downto 0) := (others => '0');
 signal debug_addr : std_logic_vector(2 downto 0) := (others => '0');
-signal instruction, immediate16, debug_rega_out : std_logic_vector(15 downto 0) := (others => '0');
+signal instruction, immediate16, debug_rega_out, ram_data, alu_out, rega_out : std_logic_vector(15 downto 0) := (others => '0');
 
 begin
 
 dut : dp_alu_regfile port map (
-    clk => clk, reg_write => reg_write, imm7_op => imm7_op, beq_cmd => beq_cmd, alu_op => alu_op, instruction => instruction,
+    clk => clk, reg_write => reg_write, imm7_op => imm7_op, beq_cmd => beq_cmd, 
+    mem_to_reg => mem_to_reg, alu_op => alu_op, instruction => instruction, ram_data => ram_data,
     debug => debug, debug_addr => debug_addr, debug_rega_out => debug_rega_out, 
-    a_equ_b => a_equ_b, immediate16 => immediate16
+    alu_out => alu_out, rega_out => rega_out, a_equ_b => a_equ_b, immediate16 => immediate16
 );
 
 timing : process begin 
@@ -78,6 +83,8 @@ stimulus : process begin
     imm7_op <= '1';
     debug <= '0';
     alu_op <= "00";
+    ram_data <= x"0000";
+    mem_to_reg <= '0';
     instruction <= "001" & "001" & "000" & "0000001";
     wait until clk = '1';
     wait for 1ps;
@@ -127,6 +134,30 @@ stimulus : process begin
     wait for 1ps;
     assert a_equ_b = '1'
     report "False negative in second BEQ cmd" severity error;
+    
+    -- sw r1, r1, 1
+    beq_cmd <= '0';
+    reg_write <= '0';
+    imm7_op <= '1';
+    debug <= '0';
+    alu_op <= "00";
+    ram_data <= x"0000";
+    mem_to_reg <= '1';
+    instruction <= "101" & "001" & "001" & "0000001";
+    wait until clk = '1';
+    wait for 1ps;
+    
+    -- lw r2, r1, 1
+    beq_cmd <= '0';
+    reg_write <= '1';
+    imm7_op <= '1';
+    debug <= '0';
+    alu_op <= "00";
+    ram_data <= x"FFFF";
+    mem_to_reg <= '1';
+    instruction <= "100" & "010" & "001" & "0000001";
+    wait until clk = '1';
+    wait for 1ps;
     
     debug <= '1';
     debug_addr <= "000";
