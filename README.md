@@ -11,7 +11,7 @@ A 16-bit single-cycle RISC processor implemented in VHDL, targeting the Digilent
 The processor follows a classic single-cycle datapath design with a 3-bit opcode space.
 
 ### Clock Source
-The processor has two clocks. One for the 7-Segment-multiplexing (default: 100Mhz) which gets turned into 1kHz in the dec_16bit_to_7seg entity and one system clk (default 5MHz). This is implemented through the clocking wizard IP. 
+The processor has two clocks. One for the 7-Segment-multiplexing and one system clk. This is implemented through the clocking wizard IP. 
 
 ### Debug Mode
 
@@ -25,9 +25,14 @@ When the processor halts (after a `HALT` instruction), it enters debug mode:
 
 ## Todo
 
-1. Implement nand, lui jarl
-2. Add build tcl script
-3. Update documentation on clk_wiz
+1. nand
+    - Same as add with new alu op
+2. lui 
+    - new 2k extender with lower 6 bits = 0
+    - broaden mem_to_reg mux to 4-1 with new 2k extender as input and pc+1 for jarl
+3. jarl
+4. Add build tcl script
+5. Update documentation on clk_wiz
 
 ---
 
