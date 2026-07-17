@@ -45,7 +45,7 @@ entity dp_alu_regfile is
            debug_rega_out : out std_logic_vector(15 downto 0);
            a_equ_b : out STD_LOGIC;
            alu_out : out std_logic_vector (15 downto 0);
-           rega_out : out std_logic_vector (15 downto 0);
+           regb_out : out std_logic_vector (15 downto 0);
            immediate16 : out std_logic_vector (15 downto 0));
 end dp_alu_regfile;
 
@@ -151,6 +151,6 @@ debug_mux : mux_2to1 port map (
 
 immediate16 <= imm16_input;
 alu_out <= alu_output;
-rega_out <= a_data;
+regb_out <= b_data;
 
 end Structural;

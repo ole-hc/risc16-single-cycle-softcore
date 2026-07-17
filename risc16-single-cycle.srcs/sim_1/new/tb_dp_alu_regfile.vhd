@@ -51,14 +51,14 @@ component dp_alu_regfile is
            debug_rega_out : out std_logic_vector(15 downto 0);
            a_equ_b : out STD_LOGIC;
            alu_out : out std_logic_vector (15 downto 0);
-           rega_out : out std_logic_vector (15 downto 0);
+           regb_out : out std_logic_vector (15 downto 0);
            immediate16 : out std_logic_vector (15 downto 0));
 end component;
 
 signal clk, reg_write, imm7_op, a_equ_b, regb_sel, debug, mem_to_reg : std_logic := '0';
 signal alu_op : std_logic_vector(1 downto 0) := (others => '0');
 signal debug_addr : std_logic_vector(2 downto 0) := (others => '0');
-signal instruction, immediate16, debug_rega_out, ram_data, alu_out, rega_out : std_logic_vector(15 downto 0) := (others => '0');
+signal instruction, immediate16, debug_rega_out, ram_data, alu_out, regb_out : std_logic_vector(15 downto 0) := (others => '0');
 
 begin
 
@@ -66,7 +66,7 @@ dut : dp_alu_regfile port map (
     clk => clk, reg_write => reg_write, imm7_op => imm7_op, regb_sel => regb_sel, 
     mem_to_reg => mem_to_reg, alu_op => alu_op, instruction => instruction, ram_data => ram_data,
     debug => debug, debug_addr => debug_addr, debug_rega_out => debug_rega_out, 
-    alu_out => alu_out, rega_out => rega_out, a_equ_b => a_equ_b, immediate16 => immediate16
+    alu_out => alu_out, regb_out => regb_out, a_equ_b => a_equ_b, immediate16 => immediate16
 );
 
 timing : process begin 

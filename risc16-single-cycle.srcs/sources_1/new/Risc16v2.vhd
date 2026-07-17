@@ -48,7 +48,7 @@ component Risc16_datapath is
            reset : in STD_LOGIC;
            pc_load : in STD_LOGIC;
            pc_sel : in STD_LOGIC;
-           beq_cmd : in STD_LOGIC;
+           regb_sel : in STD_LOGIC;
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
@@ -56,7 +56,7 @@ component Risc16_datapath is
            mem_to_reg : in std_logic;
            ram_data : in STD_LOGIC_VECTOR (15 downto 0);
            alu_out : out STD_LOGIC_VECTOR (15 downto 0);
-           rega_out : out STD_LOGIC_VECTOR (15 downto 0);
+           regb_out : out STD_LOGIC_VECTOR (15 downto 0);
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
            a_equ_b : out STD_LOGIC;
            debug : in std_logic;
@@ -72,7 +72,7 @@ component Risc16_controller is
            reg_write : out STD_LOGIC;
            imm7_op : out STD_LOGIC;
            alu_op : out STD_LOGIC_VECTOR (1 downto 0);
-           beq_cmd : out STD_LOGIC;
+           regb_sel : out STD_LOGIC;
            ram_write_en : out std_logic;
            mem_to_reg : out std_logic;
            debug : out std_logic;
@@ -109,13 +109,13 @@ component clk_wiz_0
         );
 end component;
 
-signal pc_load, pc_sel, beq_cmd, reg_write, imm7_op, mem_to_reg, ram_write_en, debug : std_logic := '0';
+signal pc_load, pc_sel, regb_sel, reg_write, imm7_op, mem_to_reg, ram_write_en, debug : std_logic := '0';
 signal alu_op : std_logic_vector(1 downto 0) := "00";
-signal ram_data, alu_out, rega_out, instruction, ir_addr : std_logic_vector(15 downto 0) := (others => '0');
+signal ram_data, alu_out, regb_out, instruction, ir_addr : std_logic_vector(15 downto 0) := (others => '0');
 signal a_equ_b : std_logic := '0';
 
 -- clock 
-signal clk_system, clk_7seg : std_logic := '0';
+signal clk_system, clk_system_n, clk_7seg : std_logic := '0';
 
 -- clk wiz 
 signal int_reset, locked : std_logic := '0';
@@ -138,7 +138,7 @@ datapath : Risc16_datapath port map (
     reset => int_reset, 
     pc_load => pc_load, 
     pc_sel => pc_sel, 
-    beq_cmd => beq_cmd,
+    regb_sel => regb_sel,
     reg_write => reg_write, 
     imm7_op => imm7_op, 
     debug => debug,
@@ -149,7 +149,7 @@ datapath : Risc16_datapath port map (
     mem_to_reg => mem_to_reg,
     ram_data => ram_data,
     alu_out => alu_out,
-    rega_out => rega_out,
+    regb_out => regb_out,
     debug_addr => debug_addr,
     debug_rega_out => debug_rega_out
 );
@@ -162,7 +162,7 @@ controller : Risc16_controller port map (
     reg_write => reg_write,
     imm7_op => imm7_op,
     alu_op => alu_op, 
-    beq_cmd => beq_cmd,
+    regb_sel => regb_sel,
     ram_write_en => ram_write_en, 
     mem_to_reg => mem_to_reg,  
     idle => idle,
@@ -174,10 +174,11 @@ rom : rom1k_16 port map (
     data => instruction
 );
 
+clk_system_n <= not clk_system;
 ram : ram4k_16 port map (
-    clk => not clk_system,
+    clk => clk_system_n,
     write_en => ram_write_en,
-    data_in => rega_out,
+    data_in => regb_out,
     addr => alu_out,
     data_out => ram_data
 );
