@@ -41,7 +41,7 @@ component dp_alu_regfile is
     Port ( clk : in STD_LOGIC;
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
-           beq_cmd : in std_logic;
+           regb_sel : in std_logic;
            mem_to_reg : in std_logic;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in std_logic_vector (15 downto 0);
@@ -55,7 +55,7 @@ component dp_alu_regfile is
            immediate16 : out std_logic_vector (15 downto 0));
 end component;
 
-signal clk, reg_write, imm7_op, a_equ_b, beq_cmd, debug, mem_to_reg : std_logic := '0';
+signal clk, reg_write, imm7_op, a_equ_b, regb_sel, debug, mem_to_reg : std_logic := '0';
 signal alu_op : std_logic_vector(1 downto 0) := (others => '0');
 signal debug_addr : std_logic_vector(2 downto 0) := (others => '0');
 signal instruction, immediate16, debug_rega_out, ram_data, alu_out, rega_out : std_logic_vector(15 downto 0) := (others => '0');
@@ -63,7 +63,7 @@ signal instruction, immediate16, debug_rega_out, ram_data, alu_out, rega_out : s
 begin
 
 dut : dp_alu_regfile port map (
-    clk => clk, reg_write => reg_write, imm7_op => imm7_op, beq_cmd => beq_cmd, 
+    clk => clk, reg_write => reg_write, imm7_op => imm7_op, regb_sel => regb_sel, 
     mem_to_reg => mem_to_reg, alu_op => alu_op, instruction => instruction, ram_data => ram_data,
     debug => debug, debug_addr => debug_addr, debug_rega_out => debug_rega_out, 
     alu_out => alu_out, rega_out => rega_out, a_equ_b => a_equ_b, immediate16 => immediate16
@@ -78,7 +78,7 @@ stimulus : process begin
     wait for 100ns; 
     
     -- addi r1, r0, 1
-    beq_cmd <= '0';
+    regb_sel <= '0';
     reg_write <= '1';
     imm7_op <= '1';
     debug <= '0';
@@ -109,7 +109,7 @@ stimulus : process begin
     
     -- beq test
     -- addi r1, r0, 1
-    beq_cmd <= '0';
+    regb_sel <= '0';
     reg_write <= '1';
     imm7_op <= '1';
     alu_op <= "00";
@@ -118,7 +118,7 @@ stimulus : process begin
     wait for 1ps;
     
     -- beq r1, r0, 5
-    beq_cmd <= '1';
+    regb_sel <= '1';
     imm7_op <= '0';
     alu_op <= "10";
     instruction <= "110" & "001" & "000" & "0000101";
@@ -136,7 +136,7 @@ stimulus : process begin
     report "False negative in second BEQ cmd" severity error;
     
     -- sw r1, r1, 1
-    beq_cmd <= '0';
+    regb_sel <= '0';
     reg_write <= '0';
     imm7_op <= '1';
     debug <= '0';
@@ -148,7 +148,7 @@ stimulus : process begin
     wait for 1ps;
     
     -- lw r2, r1, 1
-    beq_cmd <= '0';
+    regb_sel <= '0';
     reg_write <= '1';
     imm7_op <= '1';
     debug <= '0';

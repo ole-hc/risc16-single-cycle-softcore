@@ -44,7 +44,7 @@ component Risc16_datapath is
            reset : in STD_LOGIC;
            pc_load : in STD_LOGIC;
            pc_sel : in STD_LOGIC;
-           beq_cmd : in STD_LOGIC;
+           regb_sel : in STD_LOGIC;
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
@@ -60,7 +60,7 @@ component Risc16_datapath is
            debug_rega_out : out std_logic_vector(15 downto 0));
 end component; 
 
-signal clk, reset, pc_load, pc_sel, beq_cmd, reg_write, imm7_op, debug, mem_to_reg : std_logic := '0';
+signal clk, reset, pc_load, pc_sel, regb_sel, reg_write, imm7_op, debug, mem_to_reg : std_logic := '0';
 signal alu_op : std_logic_vector (1 downto 0) := (others => '0');
 signal debug_addr : std_logic_vector(2 downto 0) := (others => '0');
 signal instruction, ir_addr, debug_rega_out, ram_data, alu_out, rega_out : std_logic_vector (15 downto 0) := (others => '0');
@@ -71,7 +71,7 @@ begin
 dut : Risc16_datapath port map (
     clk => clk, reset => reset,
     pc_load => pc_load, pc_sel => pc_sel,
-    beq_cmd => beq_cmd, reg_write => reg_write, imm7_op => imm7_op, 
+    regb_sel => regb_sel, reg_write => reg_write, imm7_op => imm7_op, 
     alu_op => alu_op, instruction => instruction, 
     mem_to_reg => mem_to_reg, ram_data => ram_data, 
     ir_addr => ir_addr, a_equ_b => a_equ_b, alu_out => alu_out, rega_out => rega_out,
@@ -96,7 +96,7 @@ stimulus : process begin
     ram_data <= x"0000";
     pc_sel <= '0';
     pc_load <= '1';
-    beq_cmd <= '1';
+    regb_sel <= '1';
     imm7_op <= '1';
     alu_op <= "10";
     instruction <= "110" & "001" & "000" & "0000101";
@@ -109,7 +109,7 @@ stimulus : process begin
     -- addi r1, r0, 5
     pc_sel <= '0';
     pc_load <= '1';
-    beq_cmd <= '0';
+    regb_sel <= '0';
     reg_write <= '1';
     imm7_op <= '1';
     alu_op <= "00";
@@ -120,7 +120,8 @@ stimulus : process begin
     -- beq r1, r1, 5
     pc_sel <= '0';
     pc_load <= '1';
-    beq_cmd <= '1';
+    regb_sel <= '1';
+    reg_write <= '1';
     imm7_op <= '1';
     alu_op <= "10";
     instruction <= "110" & "001" & "001" & "0000101";
@@ -135,7 +136,8 @@ stimulus : process begin
     ram_data <= x"F0F0";
     pc_sel <= '0';
     pc_load <= '1';
-    beq_cmd <= '0';
+    regb_sel <= '0';
+    reg_write <= '1';
     imm7_op <= '1';
     alu_op <= "00";
     instruction <= "100" & "010" & "001" & "0000010";
@@ -148,7 +150,7 @@ stimulus : process begin
     ram_data <= x"0000";
     pc_sel <= '0';
     pc_load <= '1';
-    beq_cmd <= '0';
+    regb_sel <= '0';
     imm7_op <= '1';
     reg_write <= '0';
     alu_op <= "00";

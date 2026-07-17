@@ -36,7 +36,7 @@ entity Risc16_datapath is
            reset : in STD_LOGIC;
            pc_load : in STD_LOGIC;
            pc_sel : in STD_LOGIC;
-           beq_cmd : in STD_LOGIC;
+           regb_sel : in STD_LOGIC;
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
@@ -95,7 +95,7 @@ programm_counter : prog_counter port map (
 
 regfile_alu : dp_alu_regfile port map (
     clk => clk, 
-    reg_write => reg_write, imm7_op => imm7_op, beq_cmd => beq_cmd, 
+    reg_write => reg_write, imm7_op => imm7_op, regb_sel => regb_sel, 
     alu_op => alu_op, instruction => instruction, mem_to_reg => mem_to_reg,
     ram_data => ram_data, alu_out => alu_out, rega_out => rega_out,
     debug => debug, debug_addr => debug_addr, debug_rega_out => debug_rega_out,

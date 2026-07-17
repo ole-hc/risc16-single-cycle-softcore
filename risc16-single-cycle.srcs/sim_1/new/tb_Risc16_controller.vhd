@@ -45,22 +45,25 @@ component Risc16_controller is
            reg_write : out STD_LOGIC;
            imm7_op : out STD_LOGIC;
            alu_op : out STD_LOGIC_VECTOR (1 downto 0);
-           beq_cmd : out STD_LOGIC;
+           regb_sel : out STD_LOGIC;
+           ram_write_en : out std_logic;
+           mem_to_reg : out std_logic;
            debug : out std_logic;
            idle : out STD_LOGIC);
 end component;
 
 signal instruction : std_logic_vector (15 downto 0) := (others => '0');
-signal a_equ_b, pc_load, pc_sel, reg_write, imm7_op : std_logic := '0';
+signal a_equ_b, pc_load, pc_sel, reg_write, imm7_op, ram_write_en, mem_to_reg: std_logic := '0';
 signal alu_op : std_logic_vector (1 downto 0) := "00";
-signal beq_cmd, idle, debug : std_logic := '0';
+signal regb_sel, idle, debug : std_logic := '0';
 
 begin
 
 dut : Risc16_controller port map (
     instruction => instruction, a_equ_b => a_equ_b,
     pc_load => pc_load, pc_sel => pc_sel, reg_write => reg_write, imm7_op => imm7_op,
-    alu_op => alu_op, beq_cmd => beq_cmd, idle => idle, debug => debug
+    ram_write_en => ram_write_en, mem_to_reg => mem_to_reg,
+    alu_op => alu_op, regb_sel => regb_sel, idle => idle, debug => debug
 );
 
 stimulus : process begin 

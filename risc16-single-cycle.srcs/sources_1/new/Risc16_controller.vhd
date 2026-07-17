@@ -39,7 +39,9 @@ entity Risc16_controller is
            reg_write : out STD_LOGIC;
            imm7_op : out STD_LOGIC;
            alu_op : out STD_LOGIC_VECTOR (1 downto 0);
-           beq_cmd : out STD_LOGIC;
+           regb_sel : out STD_LOGIC;
+           ram_write_en : out std_logic;
+           mem_to_reg : out std_logic;
            debug : out std_logic;
            idle : out STD_LOGIC);
 end Risc16_controller;
@@ -61,7 +63,9 @@ output : process (opcode, a_equ_b) begin
             reg_write <= '1';
             imm7_op <= '0';
             alu_op <= "00";
-            beq_cmd <= '0';
+            regb_sel <= '0';
+            ram_write_en <= '0';
+            mem_to_reg <= '0';
             idle <= '0';
             debug <= '0';
         -- addi
@@ -71,7 +75,33 @@ output : process (opcode, a_equ_b) begin
             reg_write <= '1';
             imm7_op <= '1';
             alu_op <= "00";
-            beq_cmd <= '0';
+            regb_sel <= '0';
+            ram_write_en <= '0';
+            mem_to_reg <= '0';
+            idle <= '0';
+            debug <= '0';
+        -- sw
+        when "100" =>
+            pc_load <= '1';
+            pc_sel <= '0';
+            reg_write <= '0';
+            imm7_op <= '1';
+            alu_op <= "00";
+            regb_sel <= '1';
+            ram_write_en <= '1';
+            mem_to_reg <= '0';
+            idle <= '0';
+            debug <= '0';
+        -- lw
+        when "101" =>
+            pc_load <= '1';
+            pc_sel <= '0';
+            reg_write <= '0';
+            imm7_op <= '1';
+            alu_op <= "00";
+            regb_sel <= '0';
+            ram_write_en <= '0';
+            mem_to_reg <= '0';
             idle <= '0';
             debug <= '0';
         -- beq
@@ -81,7 +111,9 @@ output : process (opcode, a_equ_b) begin
             reg_write <= '0';
             imm7_op <= '0';
             alu_op <= "10";
-            beq_cmd <= '1';
+            regb_sel <= '1';
+            ram_write_en <= '0';
+            mem_to_reg <= '0';
             idle <= '0';
             debug <= '0';
         -- halt
@@ -91,7 +123,9 @@ output : process (opcode, a_equ_b) begin
             reg_write <= '0';
             imm7_op <= '0';
             alu_op <= "00";
-            beq_cmd <= '0';
+            regb_sel <= '0';
+            ram_write_en <= '0';
+            mem_to_reg <= '0';
             idle <= '1'; 
             debug <= '1'; 
         -- unimplemented opcode 
