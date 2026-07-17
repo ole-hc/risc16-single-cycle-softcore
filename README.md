@@ -25,8 +25,9 @@ When the processor halts (after a `HALT` instruction), it enters debug mode:
 
 ## Todo
 
-1. Implement missing instructions (`LW`, `SW`, etc.)
+1. Implement nand, lui jarl
 2. Add build tcl script
+3. Update documentation on clk_wiz
 
 ---
 
