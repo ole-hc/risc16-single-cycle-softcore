@@ -2,7 +2,7 @@
 
 A 16-bit single-cycle RISC processor written in VHDL, targeting the Digilent Basys3 development board (Artix-7).
 
-The full RiSC-16 instruction set is implemented — `ADD`, `ADDI`, `NAND`, `LUI`, `SW`, `LW`, `BEQ` and `JALR` — as defined in the [RiSC-16 ISA specification](https://user.eng.umd.edu/~blj/risc/RiSC-isa.pdf). The processor has been validated both in simulation and on real hardware.
+The full RiSC-16 instruction set is implemented — `ADD`, `ADDI`, `NAND`, `LUI`, `SW`, `LW`, `BEQ` and `JALR` as defined in the [RiSC-16 ISA specification](https://user.eng.umd.edu/~blj/risc/RiSC-isa.pdf). The processor has been validated both in simulation and on real hardware.
 
 ---
 
@@ -14,12 +14,12 @@ The design follows a classic single-cycle datapath with a Harvard architecture:
 |---|---|
 | **Word width** | 16 bit |
 | **Registers** | 8 × 16 bit (`r0` hardwired to zero) |
-| **Opcode space** | 3 bit — all 8 opcodes used |
+| **Opcode space** | 3 bit |
 | **Instruction memory** | 1k × 16 bit ROM |
 | **Data memory** | 64k × 16 bit RAM (`LW` / `SW`) |
 | **Execution model** | Single cycle |
 
-The instruction ROM is filled in the Vivado editor before synthesis — there is no bootloader or external program load path.
+The instruction ROM is filled in the Vivado editor before synthesis. There is no bootloader or external program load path!
 
 ![RISC16 Block Diagram](figures/Risc16v2.svg)
 
@@ -68,7 +68,7 @@ When the controller hits an unknown instruction, the processor halts and enters 
 | `Risc16v1_2` | Controller, datapath and ROM with `ADD`, `ADDI`, `BEQ`, halt. |
 | `Risc16v1_1` | First test of datapath and ROM, controller stimulated from the testbench. |
 
-The `v1_x` versions no longer build — they are kept as build-time checkpoints of how the design grew.
+The `v1_x` versions no longer build, they are kept as build-time checkpoints of how the design grew.
 
 ---
 
@@ -90,11 +90,11 @@ The `v1_x` versions no longer build — they are kept as build-time checkpoints 
 
 ### Constraint File
 
-Only ports of the **top level entity** can be mapped in the constraint file. If you want to connect `debug_addr` — which is needed by the `dp_alu_regfile` entity — the signal has to be routed through every layer of the hierarchy. This adds a lot of overhead to the intermediate layers and reduces the reusability of the individual modules.
+Only ports of the **top level entity** can be mapped in the constraint file. If you want to connect `debug_addr`, which is needed by the `dp_alu_regfile` entity, the signal has to be routed through every layer of the hierarchy. This adds a lot of overhead to the intermediate layers and reduces the reusability of the individual modules.
 
 Every top level port has to be mapped in the constraints file.
 
-The clock signal cannot be mapped to a button. Vivado rejects this because buttons are not stable clock sources — you would have to debounce the button yourself first.
+The clock signal cannot be mapped to a button. Vivado rejects this because buttons are not stable clock sources.
 
 ### Combinatorial Loops
 
@@ -102,7 +102,7 @@ The `BEQ` hardware path (2's complement extender → `imm16` → mux) feeds part
 
 ### Seven Segment Display
 
-When displaying a number across all four digits, the multiplexing frequency must not be too high — otherwise every segment appears lit at once. Around 1 kHz works well, which gives roughly 1 ms per digit.
+When displaying a number across all four digits, the multiplexing frequency must not be too high, otherwise every segment appears lit at once. Around 1 kHz works well, which gives roughly 1 ms per digit.
 
 The Basys3 seven-segment display is **active low** on both cathodes and anodes, so the outputs have to be inverted.
 
