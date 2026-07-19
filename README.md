@@ -1,53 +1,74 @@
 # RISC16 Single-Cycle Processor | Basys3 FPGA
 
-A 16-bit single-cycle RISC processor implemented in VHDL, targeting the Digilent Basys3 development board.
+A 16-bit single-cycle RISC processor written in VHDL, targeting the Digilent Basys3 development board (Artix-7).
+
+The full RiSC-16 instruction set is implemented — `ADD`, `ADDI`, `NAND`, `LUI`, `SW`, `LW`, `BEQ` and `JALR` — as defined in the [RiSC-16 ISA specification](https://user.eng.umd.edu/~blj/risc/RiSC-isa.pdf). The processor has been validated both in simulation and on real hardware.
 
 ---
 
-## Architecture
+## Overview
+
+The design follows a classic single-cycle datapath with a Harvard architecture:
+
+| | |
+|---|---|
+| **Word width** | 16 bit |
+| **Registers** | 8 × 16 bit (`r0` hardwired to zero) |
+| **Opcode space** | 3 bit — all 8 opcodes used |
+| **Instruction memory** | 1k × 16 bit ROM |
+| **Data memory** | 64k × 16 bit RAM (`LW` / `SW`) |
+| **Execution model** | Single cycle |
+
+The instruction ROM is filled in the Vivado editor before synthesis — there is no bootloader or external program load path.
 
 ![RISC16 Block Diagram](figures/Risc16v2.svg)
 
-The processor follows a classic single-cycle datapath design with a 3-bit opcode space.
+### Instruction Set
 
-### Clock Source
-The processor has two clocks. One for the 7-Segment-multiplexing and one system clk. This is implemented through the clocking wizard IP. 
+| Opcode | Instruction | Format | Operation |
+|--------|-------------|--------|-----------|
+| `000` | `ADD  rA,rB,rC` | RRR | rA = rB + rC |
+| `001` | `ADDI rA,rB,imm7` | RRI | rA = rB + imm7 (signed) |
+| `010` | `NAND rA,rB,rC` | RRR | rA = ~(rB & rC) |
+| `011` | `LUI  rA,imm10` | RI | rA = imm10 << 6 |
+| `100` | `SW   rA,rB,imm7` | RRI | mem[rB + imm7] = rA |
+| `101` | `LW   rA,rB,imm7` | RRI | rA = mem[rB + imm7] |
+| `110` | `BEQ  rA,rB,imm7` | RRI | if rA == rB: PC = PC + 1 + imm7 |
+| `111` | `JALR rA,rB` | RRI | rA = PC + 1; PC = rB |
+
+---
+
+## Implementation Notes
+
+### Clocking
+
+The processor runs on two clocks derived from the Basys3 100 MHz oscillator via the **Clocking Wizard IP**: one for the seven-segment multiplexing and one system clock for the processor itself.
+
+The data RAM is clocked on the **inverted** system clock. This is what makes load and store work in a single cycle: address and write data are computed combinationally during the first half of the cycle, the RAM latches on the falling edge, and the result is written back to the register file on the next rising edge.
 
 ### Debug Mode
 
+During normal operation:
+
 - **LEDs** display the current instruction from left to right
-- **7-segment display** always shows the current Program Counter value in hexadecimal (both in normal operation and debug mode)
+- **7-segment display** shows the current Program Counter in hexadecimal
 
-When the processor halts (after a `HALT` instruction), it enters debug mode:
+When the controller hits an unknown instruction, the processor halts and enters debug mode:
+
 - **LEDs** display the content of the register selected via switches 0–2
+- **7-segment display** continues to show the Program Counter
 
 ---
 
-## Todo
+## Repository Structure
 
-1. nand
-    - Same as add with new alu op
-2. lui 
-    - new 2k extender with lower 6 bits = 0
-    - broaden mem_to_reg mux to 4-1 with new 2k extender as input and pc+1 for jarl
-3. jarl
-4. Add build tcl script
-5. Update documentation on clk_wiz
+| Version | Description |
+|---------|-------------|
+| **`Risc16v2`** | **Current.** Controller, datapath and Harvard memory with all RiSC-16 instructions implemented. |
+| `Risc16v1_2` | Controller, datapath and ROM with `ADD`, `ADDI`, `BEQ`, halt. |
+| `Risc16v1_1` | First test of datapath and ROM, controller stimulated from the testbench. |
 
----
-
-## File Hirarchy
-
-Risc16v2 - Controller, Datapath Harvard architecture with all risc16 commands implemented
-
--- not working anymore -- just test during build
-Risc16v1_1 - first test of datapath and rom with controller implemented in testbench
-Risc16v1_2 - Controller, Datapath and Rom with cmd: add, addi, beq, halt
-
-## Known Limitations & Potential Error Sources
-
-- `a_equ_b` is not reset between instructions — it retains its value from the last `BEQ` and is not cleared until the next `BEQ` executes.
-- Signals like `a_equ_b` have no default value and remain uninitialized (`U`) until first written.
+The `v1_x` versions no longer build — they are kept as build-time checkpoints of how the design grew.
 
 ---
 
@@ -55,34 +76,36 @@ Risc16v1_2 - Controller, Datapath and Rom with cmd: add, addi, beq, halt
 
 ### VHDL Process Sensitivity Lists
 
-**Symptom:** The controller only ever produced outputs for the first `"000"` opcode case, regardless of the actual instruction being decoded.
+**Symptom:** The controller only ever produced outputs for the first `"000"` opcode case, regardless of the instruction being decoded.
 
-**Investigation:** The waveform below shows the controller outputs frozen despite changing instructions.
+**Investigation:** The waveform below shows the controller outputs frozen while the instruction changes.
 
 ![Waveform showing controller bug](figures/Risc16v1_2_error.png)
 
-**Root cause:** The sensitivity list of the output process contained `instruction` instead of `opcode`. Even though `opcode` was correctly assigned to the upper three bits of `instruction` outside the process, the simulation never picked up on the change.
+**Root cause:** The sensitivity list of the output process contained `instruction` instead of `opcode`. Even though `opcode` was correctly assigned from the upper three bits of `instruction` outside the process, the simulation never picked up on the change.
 
 **Fix:** Replace `instruction` with `opcode` in the sensitivity list of the output process.
 
-**Takeaway:** Still not sure how the simulation works see: [vhdl-online.de | Process Execution](https://www.vhdl-online.de/courses/system_design/vhdl_language_and_syntax/process_execution) for further background.
+**Takeaway:** Always list the signals the process *actually reads*, not the ones they are derived from. I am still not entirely sure how the simulator schedules this — see [vhdl-online.de | Process Execution](https://www.vhdl-online.de/courses/system_design/vhdl_language_and_syntax/process_execution) for further background.
 
-### Constraint file
+### Constraint File
 
-Only ports of the top level entity can be mapped to the constraint file. This means if you want to connect the debug_addr - which are needed by the `dp_alu_regfile` entity - you have to connect the signal throug every layer of the Risc16v1_2 entity. 
-This not only adds much overhead to the different layers but also reduces reusablity of the different modules.  
+Only ports of the **top level entity** can be mapped in the constraint file. If you want to connect `debug_addr` — which is needed by the `dp_alu_regfile` entity — the signal has to be routed through every layer of the hierarchy. This adds a lot of overhead to the intermediate layers and reduces the reusability of the individual modules.
 
-Clk signal can not be mapped to a button or simmilar. This happens because vivado doesnt allow buttons as they are not stable clk sources. You would then have to debounce the button yourself.
+Every top level port has to be mapped in the constraints file.
 
-Every toplevel port has to be mapped to the constraints file!
+The clock signal cannot be mapped to a button. Vivado rejects this because buttons are not stable clock sources — you would have to debounce the button yourself first.
 
---- 
+### Combinatorial Loops
 
-Combinatory loops can be caused as the instruction is partly mapped to itself through the beq commands hardware implementation (eg. 2k extender, imm16, mux). This has to be disabled through the constraints file.
-
-### IP Integration
-I have integrated my first IP into a project. I used the clocking_wizard IP to split my 100MHz system clk into on clock for the 7semgent multiplexing and one for the processor.
+The `BEQ` hardware path (2's complement extender → `imm16` → mux) feeds part of the instruction back onto itself, which synthesis reports as a combinatorial loop. This warning has to be disabled in the constraints file.
 
 ### Seven Segment Display
-When trying to display a number across all four seven segment displays it is important that the clocking frequency isnt too high or else all of the displays will be completly lit. A 1kHz frequency is ideal - 15ms for each display.
-7segment disaply works with inverted - low active - signals.
+
+When displaying a number across all four digits, the multiplexing frequency must not be too high — otherwise every segment appears lit at once. Around 1 kHz works well, which gives roughly 1 ms per digit.
+
+The Basys3 seven-segment display is **active low** on both cathodes and anodes, so the outputs have to be inverted.
+
+### IP Integration
+
+This was my first time integrating an IP core into a project. I used the Clocking Wizard to split the 100 MHz system clock into one clock for the seven-segment multiplexing and one for the processor.
