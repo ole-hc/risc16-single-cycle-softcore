@@ -36,6 +36,9 @@ entity prog_counter is
            reset : in STD_LOGIC;
            load_pc : in STD_LOGIC;
            pc_sel : in STD_LOGIC;
+           jalr_sel : in STD_LOGIC;
+           jalr_addr : in STD_LOGIC_VECTOR (15 downto 0);
+           pc_p1 : out STD_LOGIC_VECTOR (15 downto 0);
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
            br_offset : in std_logic_vector (15 downto 0));
 end prog_counter;
@@ -72,12 +75,12 @@ component mux_2to1 is
            y : out std_logic_vector (data_width - 1 downto 0));
 end component;
 
-signal pc_value, adder_out, mux_out : std_logic_vector (15 downto 0) := (others => '0');
+signal pc_value, adder_out, mux_out, jarl_mux_out : std_logic_vector (15 downto 0) := (others => '0');
 
 begin
 programm_counter : register_nbit 
     generic map (data_width => 16)
-    port map (clk => clk, reset => reset, data => adder_out, q => pc_value, load => load_pc);
+    port map (clk => clk, reset => reset, data => jarl_mux_out, q => pc_value, load => load_pc);
 
 pc_adder : full_adder_nbit
     generic map (data_width => 16)
@@ -86,7 +89,12 @@ pc_adder : full_adder_nbit
 pc_mux : mux_2to1 
     generic map (data_width => 16)
     port map (a => x"0000", b => br_offset, sel => pc_sel, y => mux_out);
+    
+jalr_mux : mux_2to1 
+    generic map (data_width => 16)
+    port map (a => adder_out, b => jalr_addr, sel => jalr_sel, y => jarl_mux_out);
 
 ir_addr <= pc_value;
+pc_p1 <= adder_out;
 
 end Structural;

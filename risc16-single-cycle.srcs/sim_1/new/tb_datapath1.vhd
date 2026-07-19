@@ -42,18 +42,31 @@ component prog_counter is
            reset : in STD_LOGIC;
            load_pc : in STD_LOGIC;
            pc_sel : in STD_LOGIC;
+           jalr_sel : in STD_LOGIC;
+           jalr_addr : in STD_LOGIC_VECTOR (15 downto 0);
+           pc_p1 : out STD_LOGIC_VECTOR (15 downto 0);
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
            br_offset : in std_logic_vector (15 downto 0));
 end component;
 
-signal clk, reset, load_pc, pc_sel : std_logic := '0';
-signal ir_addr, br_offset : std_logic_vector (15 downto 0) := (others => '0');
+signal clk, reset, load_pc, pc_sel, jalr_sel : std_logic := '0';
+signal ir_addr, br_offset, jalr_addr, pc_p1 : std_logic_vector (15 downto 0) := (others => '0');
 
 signal offset : integer := -5;
 
 begin
 
-dut : prog_counter port map (clk => clk, reset => reset, load_pc => load_pc, pc_sel => pc_sel, ir_addr => ir_addr, br_offset => br_offset);
+dut : prog_counter port map (
+    clk => clk, 
+    reset => reset, 
+    load_pc => load_pc, 
+    pc_sel => pc_sel, 
+    jalr_sel => jalr_sel,
+    jalr_addr => jalr_addr,
+    pc_p1 => pc_p1,
+    ir_addr => ir_addr, 
+    br_offset => br_offset
+);
 
 timing : process begin 
     wait for 25ns;
@@ -64,11 +77,23 @@ test : process begin
     -- count until x0004
     reset <= '1';
     load_pc <= '1';
+    jalr_sel <= '0';
     wait until clk = '1';
     wait for 1ps;
     reset <= '0';
     
-    wait until ir_addr = x"0004";
+    wait until ir_addr = x"0002";
+    jalr_sel <= '1';
+    jalr_addr <= x"1000";
+    wait until clk = '1';
+    assert pc_p1 = x"0003" 
+    report "Error wrong pc_p1 on jump" severity error;
+    
+    jalr_addr <= x"0005";
+    wait until clk = '1';
+    jalr_sel <= '0';
+    
+    wait until ir_addr = x"0008";
     
     -- jmp back to x0000
     br_offset <= std_logic_vector(to_signed(offset, br_offset'length));
