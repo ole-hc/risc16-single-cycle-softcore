@@ -49,10 +49,10 @@ component Risc16_datapath is
            imm7_op : in STD_LOGIC;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in STD_LOGIC_VECTOR (15 downto 0);
-           mem_to_reg : in std_logic;
+           mem_to_reg : in std_logic_vector (1 downto 0);
            ram_data : in STD_LOGIC_VECTOR (15 downto 0);
            alu_out : out STD_LOGIC_VECTOR (15 downto 0);
-           rega_out : out STD_LOGIC_VECTOR (15 downto 0);
+           regb_out : out STD_LOGIC_VECTOR (15 downto 0);
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
            a_equ_b : out STD_LOGIC;
            debug : in std_logic;
@@ -60,10 +60,10 @@ component Risc16_datapath is
            debug_rega_out : out std_logic_vector(15 downto 0));
 end component; 
 
-signal clk, reset, pc_load, pc_sel, regb_sel, reg_write, imm7_op, debug, mem_to_reg : std_logic := '0';
-signal alu_op : std_logic_vector (1 downto 0) := (others => '0');
+signal clk, reset, pc_load, pc_sel, regb_sel, reg_write, imm7_op, debug : std_logic := '0';
+signal alu_op, mem_to_reg : std_logic_vector (1 downto 0) := (others => '0');
 signal debug_addr : std_logic_vector(2 downto 0) := (others => '0');
-signal instruction, ir_addr, debug_rega_out, ram_data, alu_out, rega_out : std_logic_vector (15 downto 0) := (others => '0');
+signal instruction, ir_addr, debug_rega_out, ram_data, alu_out, regb_out : std_logic_vector (15 downto 0) := (others => '0');
 signal a_equ_b : std_logic := '0';
 
 begin
@@ -74,7 +74,7 @@ dut : Risc16_datapath port map (
     regb_sel => regb_sel, reg_write => reg_write, imm7_op => imm7_op, 
     alu_op => alu_op, instruction => instruction, 
     mem_to_reg => mem_to_reg, ram_data => ram_data, 
-    ir_addr => ir_addr, a_equ_b => a_equ_b, alu_out => alu_out, rega_out => rega_out,
+    ir_addr => ir_addr, a_equ_b => a_equ_b, alu_out => alu_out, regb_out => regb_out,
     debug => debug, debug_addr => debug_addr, debug_rega_out => debug_rega_out
 );
 
@@ -92,7 +92,7 @@ stimulus : process begin
     reset <= '0';
     
     -- beq r1, r0, 5 
-    mem_to_reg <= '0';
+    mem_to_reg <= "00";
     ram_data <= x"0000";
     pc_sel <= '0';
     pc_load <= '1';
@@ -132,7 +132,7 @@ stimulus : process begin
     wait for 10ns;
     
     -- lw r2, r1, 2
-    mem_to_reg <= '1';
+    mem_to_reg <= "00";
     ram_data <= x"F0F0";
     pc_sel <= '0';
     pc_load <= '1';
@@ -146,7 +146,7 @@ stimulus : process begin
     wait for 10ns;
     
     -- sw r2, r2, -1
-    mem_to_reg <= '0';
+    mem_to_reg <= "11";
     ram_data <= x"0000";
     pc_sel <= '0';
     pc_load <= '1';

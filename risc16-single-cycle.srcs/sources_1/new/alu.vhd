@@ -55,6 +55,8 @@ output : process (a, b, alu_op) begin
             else 
                 a_equ_b <= '0';
             end if;
+        when "11" => 
+            c <= a nand b;
         when others =>
     end case;
 end process output;

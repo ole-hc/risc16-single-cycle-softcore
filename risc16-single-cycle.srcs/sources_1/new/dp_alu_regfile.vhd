@@ -36,15 +36,17 @@ entity dp_alu_regfile is
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
            regb_sel : in std_logic;
-           mem_to_reg : in std_logic;
+           mem_to_reg : in std_logic_vector (1 downto 0);
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in std_logic_vector (15 downto 0);
            ram_data : in std_logic_vector (15 downto 0);
+           pc_jalr : in std_logic_vector (15 downto 0);
            debug : in std_logic;
            debug_addr : in STD_LOGIC_VECTOR (2 downto 0);
            debug_rega_out : out std_logic_vector(15 downto 0);
            a_equ_b : out STD_LOGIC;
            alu_out : out std_logic_vector (15 downto 0);
+           rega_out : out std_logic_vector (15 downto 0);
            regb_out : out std_logic_vector (15 downto 0);
            immediate16 : out std_logic_vector (15 downto 0));
 end dp_alu_regfile;
@@ -75,6 +77,16 @@ component extender2k is
            q : out STD_LOGIC_VECTOR (15 downto 0));
 end component;
 
+component mux_4to1 is
+    generic ( data_width : integer := 16);
+    Port ( a : in std_logic_vector (data_width - 1 downto 0);
+           b : in std_logic_vector (data_width - 1 downto 0);
+           c : in std_logic_vector (data_width - 1 downto 0);
+           d : in std_logic_vector (data_width - 1 downto 0);
+           sel : in STD_LOGIC_vector (1 downto 0);
+           y : out std_logic_vector (data_width - 1 downto 0));
+end component;
+
 component mux_2to1 is
     generic ( data_width : integer := 16);
     Port ( a : in std_logic_vector (data_width - 1 downto 0);
@@ -95,6 +107,9 @@ signal alu_b, imm16_input : std_logic_vector (15 downto 0) := (others => '0');
 
 -- mux mem_to_reg
 signal alu_output : std_logic_vector (15 downto 0) := (others => '0');
+
+-- lui upsampling
+signal imm16_lui : std_logic_vector(15 downto 0) := (others => '0');
 
 begin
 
@@ -136,9 +151,11 @@ alu16 : alu port map (
     c => alu_output, a_equ_b => a_equ_b
 );
 
-ram_mux : mux_2to1 port map (
+regc_input_mux : mux_4to1 port map (
     a => alu_output, 
-    b => ram_data,
+    b => pc_jalr,
+    c => imm16_lui,
+    d => ram_data,
     sel => mem_to_reg,
     y => c_data
 );
@@ -150,7 +167,9 @@ debug_mux : mux_2to1 port map (
 );
 
 immediate16 <= imm16_input;
+imm16_lui <= instruction(9 downto 0) & std_logic_vector'("000000");
 alu_out <= alu_output;
 regb_out <= b_data;
+rega_out <= a_data;
 
 end Structural;

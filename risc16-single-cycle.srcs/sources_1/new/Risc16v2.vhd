@@ -51,9 +51,10 @@ component Risc16_datapath is
            regb_sel : in STD_LOGIC;
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
+           jalr_sel : in STD_LOGIC;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in STD_LOGIC_VECTOR (15 downto 0);
-           mem_to_reg : in std_logic;
+           mem_to_reg : in std_logic_vector (1 downto 0);
            ram_data : in STD_LOGIC_VECTOR (15 downto 0);
            alu_out : out STD_LOGIC_VECTOR (15 downto 0);
            regb_out : out STD_LOGIC_VECTOR (15 downto 0);
@@ -74,7 +75,8 @@ component Risc16_controller is
            alu_op : out STD_LOGIC_VECTOR (1 downto 0);
            regb_sel : out STD_LOGIC;
            ram_write_en : out std_logic;
-           mem_to_reg : out std_logic;
+           mem_to_reg : out std_logic_vector(1 downto 0);
+           jalr_sel : out std_logic;
            debug : out std_logic;
            idle : out STD_LOGIC);
 end component;
@@ -84,7 +86,7 @@ component rom1k_16 is
            data : out STD_LOGIC_VECTOR (15 downto 0));
 end component;
 
-component ram4k_16 is
+component ram64k_16 is
     Port ( clk : in STD_LOGIC;
            write_en : in STD_LOGIC;
            data_in : in STD_LOGIC_VECTOR (15 downto 0);
@@ -109,8 +111,8 @@ component clk_wiz_0
         );
 end component;
 
-signal pc_load, pc_sel, regb_sel, reg_write, imm7_op, mem_to_reg, ram_write_en, debug : std_logic := '0';
-signal alu_op : std_logic_vector(1 downto 0) := "00";
+signal pc_load, pc_sel, regb_sel, jalr_sel, reg_write, imm7_op, ram_write_en, debug : std_logic := '0';
+signal alu_op, mem_to_reg : std_logic_vector(1 downto 0) := "00";
 signal ram_data, alu_out, regb_out, instruction, ir_addr : std_logic_vector(15 downto 0) := (others => '0');
 signal a_equ_b : std_logic := '0';
 
@@ -151,7 +153,8 @@ datapath : Risc16_datapath port map (
     alu_out => alu_out,
     regb_out => regb_out,
     debug_addr => debug_addr,
-    debug_rega_out => debug_rega_out
+    debug_rega_out => debug_rega_out,
+    jalr_sel => jalr_sel
 );
 
 controller : Risc16_controller port map (
@@ -165,6 +168,7 @@ controller : Risc16_controller port map (
     regb_sel => regb_sel,
     ram_write_en => ram_write_en, 
     mem_to_reg => mem_to_reg,  
+    jalr_sel => jalr_sel,
     idle => idle,
     debug => debug
 );
@@ -175,7 +179,7 @@ rom : rom1k_16 port map (
 );
 
 clk_system_n <= not clk_system;
-ram : ram4k_16 port map (
+ram : ram64k_16 port map (
     clk => clk_system_n,
     write_en => ram_write_en,
     data_in => regb_out,

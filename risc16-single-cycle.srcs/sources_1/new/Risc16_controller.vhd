@@ -41,7 +41,8 @@ entity Risc16_controller is
            alu_op : out STD_LOGIC_VECTOR (1 downto 0);
            regb_sel : out STD_LOGIC;
            ram_write_en : out std_logic;
-           mem_to_reg : out std_logic;
+           mem_to_reg : out std_logic_vector(1 downto 0);
+           jalr_sel : out std_logic;
            debug : out std_logic;
            idle : out STD_LOGIC);
 end Risc16_controller;
@@ -65,7 +66,8 @@ output : process (opcode, a_equ_b) begin
             alu_op <= "00";
             regb_sel <= '0';
             ram_write_en <= '0';
-            mem_to_reg <= '0';
+            mem_to_reg <= "00";
+            jalr_sel <= '0';
             idle <= '0';
             debug <= '0';
         -- addi
@@ -77,7 +79,34 @@ output : process (opcode, a_equ_b) begin
             alu_op <= "00";
             regb_sel <= '0';
             ram_write_en <= '0';
-            mem_to_reg <= '0';
+            mem_to_reg <= "00";
+            jalr_sel <= '0';
+            idle <= '0';
+            debug <= '0';
+        -- nand 
+        when "010" => 
+            pc_load <= '1';
+            pc_sel <= '0';
+            reg_write <= '1';
+            imm7_op <= '0';
+            alu_op <= "11";
+            regb_sel <= '0';
+            ram_write_en <= '0';
+            mem_to_reg <= "00";
+            jalr_sel <= '0';
+            idle <= '0';
+            debug <= '0';
+        -- lui
+        when "011" => 
+            pc_load <= '1';
+            pc_sel <= '0';
+            reg_write <= '1';
+            imm7_op <= '0';
+            alu_op <= "00";
+            regb_sel <= '0';
+            ram_write_en <= '0';
+            mem_to_reg <= "10";
+            jalr_sel <= '0';
             idle <= '0';
             debug <= '0';
         -- sw
@@ -89,19 +118,21 @@ output : process (opcode, a_equ_b) begin
             alu_op <= "00";
             regb_sel <= '1';
             ram_write_en <= '1';
-            mem_to_reg <= '0';
+            mem_to_reg <= "00";
+            jalr_sel <= '0';
             idle <= '0';
             debug <= '0';
         -- lw
         when "101" =>
             pc_load <= '1';
             pc_sel <= '0';
-            reg_write <= '0';
+            reg_write <= '1';
             imm7_op <= '1';
             alu_op <= "00";
             regb_sel <= '0';
             ram_write_en <= '0';
-            mem_to_reg <= '0';
+            mem_to_reg <= "11";
+            jalr_sel <= '0';
             idle <= '0';
             debug <= '0';
         -- beq
@@ -113,21 +144,23 @@ output : process (opcode, a_equ_b) begin
             alu_op <= "10";
             regb_sel <= '1';
             ram_write_en <= '0';
-            mem_to_reg <= '0';
+            mem_to_reg <= "00";
+            jalr_sel <= '0';
             idle <= '0';
             debug <= '0';
-        -- halt
+        -- jalr
         when "111" =>
-            pc_load <= '0';
+            pc_load <= '1';
             pc_sel <= '0';
-            reg_write <= '0';
+            reg_write <= '1';
             imm7_op <= '0';
             alu_op <= "00";
             regb_sel <= '0';
             ram_write_en <= '0';
-            mem_to_reg <= '0';
-            idle <= '1'; 
-            debug <= '1'; 
+            mem_to_reg <= "01";
+            jalr_sel <= '1';
+            idle <= '0'; 
+            debug <= '0'; 
         -- unimplemented opcode 
         when others => 
             idle <= '1';

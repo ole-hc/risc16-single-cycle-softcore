@@ -42,15 +42,17 @@ component dp_alu_regfile is
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
            regb_sel : in std_logic;
-           mem_to_reg : in std_logic;
+           mem_to_reg : in std_logic_vector (1 downto 0);
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in std_logic_vector (15 downto 0);
            ram_data : in std_logic_vector (15 downto 0);
+           pc_jalr : in std_logic_vector (15 downto 0);
            debug : in std_logic;
            debug_addr : in STD_LOGIC_VECTOR (2 downto 0);
            debug_rega_out : out std_logic_vector(15 downto 0);
            a_equ_b : out STD_LOGIC;
            alu_out : out std_logic_vector (15 downto 0);
+           rega_out : out std_logic_vector (15 downto 0);
            regb_out : out std_logic_vector (15 downto 0);
            immediate16 : out std_logic_vector (15 downto 0));
 end component;

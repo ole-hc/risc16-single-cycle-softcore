@@ -39,9 +39,10 @@ entity Risc16_datapath is
            regb_sel : in STD_LOGIC;
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
+           jalr_sel : in STD_LOGIC;
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in STD_LOGIC_VECTOR (15 downto 0);
-           mem_to_reg : in std_logic;
+           mem_to_reg : in std_logic_vector (1 downto 0);
            ram_data : in STD_LOGIC_VECTOR (15 downto 0);
            alu_out : out STD_LOGIC_VECTOR (15 downto 0);
            regb_out : out STD_LOGIC_VECTOR (15 downto 0);
@@ -59,6 +60,9 @@ component prog_counter is
            reset : in STD_LOGIC;
            load_pc : in STD_LOGIC;
            pc_sel : in STD_LOGIC;
+           jalr_sel : in STD_LOGIC;
+           jalr_addr : in STD_LOGIC_VECTOR (15 downto 0);
+           pc_p1 : out STD_LOGIC_VECTOR (15 downto 0);
            ir_addr : out STD_LOGIC_VECTOR (15 downto 0);
            br_offset : in std_logic_vector (15 downto 0));
 end component;
@@ -68,38 +72,57 @@ component dp_alu_regfile is
            reg_write : in STD_LOGIC;
            imm7_op : in STD_LOGIC;
            regb_sel : in std_logic;
-           mem_to_reg : in std_logic;
+           mem_to_reg : in std_logic_vector (1 downto 0);
            alu_op : in STD_LOGIC_VECTOR (1 downto 0);
            instruction : in std_logic_vector (15 downto 0);
            ram_data : in std_logic_vector (15 downto 0);
+           pc_jalr : in std_logic_vector (15 downto 0);
            debug : in std_logic;
            debug_addr : in STD_LOGIC_VECTOR (2 downto 0);
            debug_rega_out : out std_logic_vector(15 downto 0);
            a_equ_b : out STD_LOGIC;
            alu_out : out std_logic_vector (15 downto 0);
+           rega_out : out std_logic_vector (15 downto 0);
            regb_out : out std_logic_vector (15 downto 0);
            immediate16 : out std_logic_vector (15 downto 0));
 end component;
 
-signal immediate16 : std_logic_vector (15 downto 0) := (others => '0');
+signal immediate16, rega_out, pc_p1 : std_logic_vector (15 downto 0) := (others => '0');
 -- signal debug_addr : STD_LOGIC_VECTOR (2 downto 0) := (others => '0');
 -- signal debug_rega_out : std_logic_vector(15 downto 0) := (others => '0');
 
 begin
 
 programm_counter : prog_counter port map (
-    clk => clk, reset => reset,
-    load_pc => pc_load, pc_sel => pc_sel,
-    ir_addr => ir_addr, br_offset => immediate16
+    clk => clk, 
+    reset => reset,
+    load_pc => pc_load, 
+    pc_sel => pc_sel, 
+    jalr_sel => jalr_sel,
+    jalr_addr => rega_out,
+    pc_p1 => pc_p1,
+    ir_addr => ir_addr, 
+    br_offset => immediate16
 );
 
 regfile_alu : dp_alu_regfile port map (
     clk => clk, 
-    reg_write => reg_write, imm7_op => imm7_op, regb_sel => regb_sel, 
-    alu_op => alu_op, instruction => instruction, mem_to_reg => mem_to_reg,
-    ram_data => ram_data, alu_out => alu_out, regb_out => regb_out,
-    debug => debug, debug_addr => debug_addr, debug_rega_out => debug_rega_out,
-    a_equ_b => a_equ_b, immediate16 => immediate16
+    reg_write => reg_write, 
+    imm7_op => imm7_op, 
+    regb_sel => regb_sel, 
+    alu_op => alu_op, 
+    instruction => instruction, 
+    mem_to_reg => mem_to_reg,
+    ram_data => ram_data, 
+    alu_out => alu_out, 
+    rega_out => rega_out,
+    regb_out => regb_out,
+    pc_jalr => pc_p1,
+    debug => debug, 
+    debug_addr => debug_addr, 
+    debug_rega_out => debug_rega_out,
+    a_equ_b => a_equ_b, 
+    immediate16 => immediate16
 );
 
 end Structural;
